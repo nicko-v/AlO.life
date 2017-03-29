@@ -1,0 +1,30 @@
+[class^="icon-"]:before, [class*=" icon-"]:before {
+	font-family: "fontello";
+	font-style: normal;
+	font-weight: normal;
+	speak: none;
+	display: inline-block;
+	text-decoration: inherit;
+	width: 1em;
+	margin-right: .2em;
+	text-align: center;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1em;
+	margin-left: .2em;
+	margin-bottom: .2em;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-users:before { content: '\e800'; }
+.icon-home:before { content: '\e801'; }
+.icon-cancel:before { content: '\e802'; }
+.icon-link:before { content: '\e803'; }
+.icon-up-open:before { content: '\e804'; }
+.icon-key:before { content: '\e805'; }
+.icon-megaphone:before { content: '\e806'; }
+.icon-down-open:before { content: '\e809'; }
+.icon-quote-left:before { content: '\f10d'; }
+.icon-unlink:before { content: '\f127'; }
+.icon-info:before { content: '\f129'; }

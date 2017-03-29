@@ -1,0 +1,49 @@
+{
+  "name": "alo-life",
+  "version": "0.0.0",
+  "description": "Blog and useful apps for Altiros Online.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack -p --hide-modules",
+    "start": "webpack-dev-server"
+  },
+  "babel": {
+    "presets": [
+      "react",
+      "latest"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicko-v/alo.life.git"
+  },
+  "keywords": [
+    "altiros"
+  ],
+  "author": "Nickolay Vasiliev <nicko.v@me.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nicko-v/alo.life/issues"
+  },
+  "homepage": "https://github.com/nicko-v/alo.life#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "react": "^15.4.2",
+    "react-cookie": "^1.0.5",
+    "react-dom": "^15.4.2",
+    "react-router-dom": "^4.0.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.7.7",
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-latest": "^6.24.0",
+    "babel-preset-react": "^6.23.0",
+    "css-loader": "^0.26.4",
+    "html-webpack-plugin": "^2.28.0",
+    "postcss-loader": "^1.3.3",
+    "style-loader": "^0.13.2",
+    "webpack": "^2.3.2",
+    "webpack-dev-server": "^2.4.2"
+  }
+}

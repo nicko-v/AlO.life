@@ -1,0 +1,214 @@
+nav {
+	width: 270px; /* Связано с margin-left у mainWrapper */
+	min-width: 270px;
+	background-color: #e8e8e8;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: #777;
+	position: fixed;
+	left: 0;
+	height: 100%;
+	z-index: 2;
+	border-right: 1px solid #ccc;
+}
+.nav-cape {
+	display: flex;
+	margin-top: -2px; /* Компенсирует сдвиг тени */
+	background-color: #ddd;
+	box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.2);
+	border-bottom-left-radius: 30px;
+	border-bottom-right-radius: 30px;
+	padding-top: 30px;
+	min-height: 120px; /* Высота svg */
+	margin-bottom: 40px;
+}
+.nav-cape-heart {
+	width: 120px;
+	height: 120px;
+}
+.nav-cape-heart-path {
+	fill: #900;
+	fill-opacity: 0;
+	stroke-opacity: 0;
+	stroke: #900;
+	stroke-width: 2;
+	stroke-linecap: round;
+	transform-origin: 25px 25px; /* Т.к. ФФ не понимает значение "center" для svg */
+	stroke-dasharray: 0, 110;
+	animation: heart-draw, heart-strokeOpacity, heart-fillOpacity, heart-beatFast, heart-beatSlow;
+	animation-duration: 2.5s, 2.5s, 1s, 1.5s, 5s;
+	animation-timing-function: ease-out, linear, ease-in, ease, cubic-bezier(.63, .12, 1, .50);
+	animation-delay: 0.5s, 0.5s, 2.7s, 3.7s, 10s;
+	animation-iteration-count: 1, 1, 1, 1, infinite;
+	animation-direction: alternate, alternate, alternate, normal, alternate;
+	animation-fill-mode: forwards, forwards, forwards, none, none;
+}
+.nav-services {
+	margin-top: 20px;
+	list-style: none;
+	width: 100%;
+	text-align: center;
+	text-transform: uppercase;
+}
+.nav-services > li {
+	height: 50px;
+	transition: background-color .2s ease-out 0s;
+	box-sizing: border-box;
+}
+.nav-services > li:hover {
+	background-color: #d0d0d0;
+}
+.nav-services > li:active {
+	background-color: #b9b9b9;
+}
+.nav-services a {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+.nav-services a:hover {
+	text-decoration: none;
+}
+.nav-links {
+	margin: 30px 0;
+	list-style: none;
+}
+.nav-links > li {
+	display: inline;
+	margin-left: 25px;
+}
+.nav-links > li:first-child {
+	margin-left: 0;
+}
+nav a {
+	color: inherit;
+}
+
+#nav-greeting {
+	width: 80%;
+	color: #900;
+	text-align: center;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 10px;
+	word-break: break-all;
+	backface-visibility: hidden;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+	flex-shrink: 0;
+}
+#nav-greeting > span {
+	white-space: nowrap;
+}
+
+.nav-mobile_SelectServiceLabel, #nav-mobile_selectServiceCheckbox {
+	display: none;
+}
+
+@media (max-width: 900px) {
+	.nav-services, .nav-separator, .pusher, #nav-greeting, #nav-links-separator {
+		display: none;
+	}
+	nav {
+		position: relative;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 80px;
+		min-height: 80px;
+		border-right: none;
+		flex-direction: row;
+		justify-content: space-between;
+		font-size: 14px;
+		border-bottom: 1px solid #ccc;
+	}
+	.nav-mobile_SelectServiceLabel {
+		order: 1;
+		display: flex;
+		flex-basis: 50%;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		padding: 0 20px;
+		cursor: pointer;
+		z-index: 9;
+		text-transform: uppercase;
+		text-align: center;
+	}
+	#nav-mobile_selectServiceCheckbox {
+		position: fixed;
+		top: -100px;
+		left: 0;
+		z-index: 7;
+	}
+	#nav-mobile_selectServiceCheckbox:checked {
+		display: block;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+	}
+	#nav-mobile_selectServiceCheckbox:checked ~ .nav-services {
+		display: block;
+		width: 30%;
+		position: absolute;
+		top: 80px;
+		left: calc(25% - 25px); /* Четверть всей длины минус четверть длины логотипа */
+		transform: translateX(-50%);
+		background-color: #e8e8e8;
+		z-index: 8;
+		padding: 0;
+		border-bottom-left-radius: 20px;
+		border-bottom-right-radius: 20px;
+		border: 1px solid #ccc;
+		border-top: none;
+		margin-top: -1px; /* Скрывает border-bottom у navbar в месте наложения */
+		padding-top: 1px; /* Скрывает border-bottom у navbar в месте наложения */
+	}
+	.nav-services > li {
+		padding: 0 10px;
+	}
+	.nav-services > li:last-child:hover {
+		border-bottom-left-radius: 20px;
+		border-bottom-right-radius: 20px;
+	}
+	.nav-cape {
+		order: 2;
+		min-height: 100px; /* Высота svg */
+		padding-top: 25px;
+		border-bottom-left-radius: 25px;
+		border-bottom-right-radius: 25px;
+		align-self: flex-start;
+		z-index: 9;
+		margin-bottom: 0;
+	}
+	.nav-cape-heart {
+		width: 100px;
+		height: 100px;
+	}
+	.nav-links {
+		order: 3;
+		padding: 0 20px;
+		margin: 0;
+		display: flex;
+		justify-content: flex-end;
+		flex-basis: 50%;
+	}
+}
+@media (max-width: 400px) {
+	.nav-links {
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	.nav-links > li {
+		display: block;
+		margin-left: 0;
+		margin-bottom: 10px;
+	}
+	.nav-links > li:last-child {
+		margin-bottom: 0;
+	}
+}

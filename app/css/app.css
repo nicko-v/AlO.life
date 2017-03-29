@@ -1,0 +1,109 @@
+@import "fontello.css";
+@import "animations.css";
+@import "darkmode.css";
+
+@font-face {
+	font-family: 'Clear Sans';
+	src: url('./fonts/clearsans-regular.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'Clear Sans';
+	src: url('./fonts/clearsans-bold.ttf');
+	font-weight: bold;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'Clear Sans';
+	src: url('./fonts/clearsans-italic.ttf');
+	font-weight: normal;
+	font-style: italic;
+}
+@font-face {
+	font-family: 'fontello';
+	src: url('./fonts/fontello.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+*::selection {
+	background-color: #aaa;
+}
+html, body {
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+	font: 16px 'Clear Sans';
+}
+p, ul, li, html, body, input {
+	margin: 0;
+	padding: 0;
+}
+img, svg {
+	vertical-align: bottom; /* Удаляет отступ под изображением */
+}
+a {
+	color: #bb832d;
+	text-decoration: none;
+	position: relative;
+}
+a::before {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 0;
+	height: 1px;
+	background-color: #bb832d;
+	transition: width 300ms ease-in 10ms;
+}
+a:hover::before {
+	width: 100%;
+}
+
+.aNoAnim {
+	transition: none;
+}
+.aNoAnim:hover, .aNoAnim:visited {
+	color: inherit;
+}
+.aNoAnim::before {
+	height: 0;
+	background-color: transparent;
+	transition: none;
+}
+.aNoAnim:hover::before {
+	width: 0;
+	background-color: transparent;
+}
+.noselect {
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+	cursor: default;
+}
+.hidden {
+	display: none;
+}
+.pusher {
+	flex-grow: 1;
+}
+
+#groot, #app {
+	display: flex;
+	width: 100%;
+	min-height: 100%;
+	position: relative;
+}
+
+@media (max-width: 900px) {
+	html {
+		min-width: 320px;
+	}
+	#app {
+		flex-direction: column;
+		align-items: center;
+	}
+}

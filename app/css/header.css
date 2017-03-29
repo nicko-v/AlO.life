@@ -1,0 +1,20 @@
+header {
+	width: 90%;
+	min-height: 80px;
+	border-bottom: 1px solid #ccc;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	animation: fade-in 300ms ease-in forwards;
+}
+.header-title {
+	color: #900;
+	text-align: center;
+}
+
+@media (max-width: 900px) {
+	header {
+		cursor: pointer !important;
+	}
+}

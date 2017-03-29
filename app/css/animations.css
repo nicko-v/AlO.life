@@ -1,0 +1,26 @@
+@keyframes fade-in {
+	to { opacity: 1; }
+}
+@keyframes heart-draw {
+	to { stroke-dasharray: 110; }
+}
+@keyframes heart-strokeOpacity {
+	to { stroke-opacity: 1; }
+}
+@keyframes heart-fillOpacity {
+	to { fill-opacity: 1; }
+}
+@keyframes heart-beatFast {
+	0%   { transform: scale(1.0); }
+	14%  { transform: scale(1.2); }
+	28%  { transform: scale(1.0); }
+	42%  { transform: scale(1.2); }
+	70%  { transform: scale(1.0); }
+}
+@keyframes heart-beatSlow {
+	from { transform: scale(1.0); }
+	to   { transform: scale(1.2); }
+}
+@keyframes events-up {
+	to { margin-top: 0; }
+}
