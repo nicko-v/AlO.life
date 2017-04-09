@@ -7,6 +7,7 @@ import Timeline  from '../components/timeline.jsx';
 import NotFound  from '../components/notfound.jsx';
 
 const nbsp = String.fromCharCode(160);
+const servicesPath = '/s';
 
 
 export default {
@@ -17,25 +18,25 @@ export default {
 		content: <MainPage />
 	},
 	blog: {
-		path: '/blog',
+		path: `${servicesPath}/blog`,
 		exact: true,
 		header: `Заметки об${nbsp}игре`,
 		content: <Blog />
 	},
 	shortener: {
-		path: '/urls',
+		path: `${servicesPath}/urls`,
 		exact: true,
 		header: `Сокращение ссылок`,
 		content: <Shortener />
 	},
 	timeline: {
-		path: '/timeline',
+		path: `${servicesPath}/timeline`,
 		exact: true,
 		header: `Хроника заметных${nbsp}событий`,
 		content: <Timeline />
 	},
 	about: {
-		path: '/about',
+		path: `${servicesPath}/about`,
 		exact: true,
 		header: `О проекте`,
 		content: <About />

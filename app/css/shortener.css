@@ -1,6 +1,73 @@
 .shortener {
 	display: flex;
 	flex-direction: column;
-	flex-grow: 1; /* Прижимает футер книзу */
 	margin-top: 90px;
+	width: 50%;
+	align-items: center;
+}
+#shortenerOptions {
+	display: none;
+}
+.urlField {
+	display: flex;
+	width: 100%;
+}
+.urlField-input {
+	height: 50px;
+	font-size: 20px;
+	color: inherit;
+	padding: 0 15px;
+	flex-grow: 1;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+	transition: all 200ms ease-out;
+	background-color: transparent;
+}
+.urlField-input:focus {
+	outline: none;
+	border: 1px solid #bbb;
+	box-shadow: 0 2px 5px 0px rgba(0, 0, 0, 0.1);
+}
+.urlField-optionsButton {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	font-size: 35px;
+	cursor: pointer;
+	transition: transform 500ms ease-out;
+	transform-origin: center;
+	margin-left: 10px;
+}
+.urlField-optionsButton:hover {
+	transform: rotate(90deg);
+}
+.urlField-optionsButton:active {
+	color: #555;
+}
+.createShortLink {
+	margin: 0;
+	padding: 0;
+	width: 200px;
+	height: 50px;
+	margin-top: 50px;
+	font-size: 20px;
+	color: #777;
+	background-color: transparent;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+	cursor: pointer;
+	transition: border 250ms ease-out;
+}
+.createShortLink:hover {
+	border: 1px solid #aaa;
+}
+.createShortLink:active {
+	box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 900px) {
+	.shortener {
+		width: 90%;
+	}
 }

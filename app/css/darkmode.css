@@ -63,11 +63,13 @@
 	background-color: #555;
 }
 #darkmode:checked ~ .content .blogpost-header {
-	color: #777;
 	border-bottom: 1px solid #555;
 }
+#darkmode:checked ~ .content .blogpost-header-title {
+	color: #aaa;
+}
 #darkmode:checked ~ .content .blogpost-header-time {
-	color: #777;
+	color: #444;
 }
 #darkmode:checked ~ .content .blogpost-manage > li {
 	color: #777;
@@ -79,7 +81,6 @@
 	color: #777;
 }
 #darkmode:checked ~ .content .eventslist-icon {
-	color: #777;
 	background-color: #333;
 }
 #darkmode:checked ~ .content .eventslist-descr {
@@ -97,6 +98,36 @@
 }
 #darkmode:checked ~ .content .eventslist > li:nth-child(2n) > .eventslist-date::after {
 	background-color: #ccc;
+}
+#darkmode:checked ~ .content .urlField-input {
+	transition: all 0s ease 0s;
+	border: 1px solid #555;
+}
+#darkmode:checked ~ .content .urlField-input:focus {
+	border: 1px solid #777;
+	box-shadow: 0 2px 5px 0px rgba(200, 200, 200, 0.1);
+}
+#darkmode:checked ~ .content .createShortLink {
+	transition: all 0s ease 0s;
+	border: 1px solid #555;
+}
+#darkmode:checked ~ .content .createShortLink:hover {
+	border: 1px solid #777;
+}
+#darkmode:checked ~ .content .createShortLink:active {
+	box-shadow: 0 0 5px 1px rgba(200, 200, 200, 0.1);
+}
+#darkmode:checked ~ .content .urlField-input::-webkit-input-placeholder {
+	color: #555;
+}
+#darkmode:checked ~ .content .urlField-input::-moz-placeholder {
+	color: #555;
+}
+#darkmode:checked ~ .content .urlField-input::-ms-input-placeholder {
+	color: #555;
+}
+#darkmode:checked ~ .content .urlField-input:-ms-input-placeholder {
+	color: #555;
 }
 
 @media (max-width: 900px) {

@@ -10,6 +10,10 @@ main { /* Общие свойства для всех подключаемых �
 	flex-grow: 1; /* Прижимает футер книзу */
 	opacity: 0;
 	animation: fade-in 300ms ease-in forwards;
+	color: #777; /* Основной цвет текста */
+}
+main a {
+	white-space: nowrap;
 }
 
 @media (max-width: 900px) {

@@ -1,22 +1,22 @@
 import styles  from '../css/app.css';
 import React   from 'react';
-import cookie  from 'react-cookie';
 import Nav     from './nav.jsx';
 import Content from './content.jsx';
-import routes  from '../data/routes.jsx';
+import routes  from './routes.jsx';
 import { Route, Switch } from 'react-router-dom';
 
 
 export default React.createClass({
-	setDarkModeCookie(e) {
-		cookie.save('darkmode', e.target.checked, { expires: new Date(2030, 0, 1) });
+	saveDarkModeState(e) {
+		window.localStorage.setItem('darkmode', +e.target.checked);
 	},
 	render() {
-		let dmEnabled = cookie.load('darkmode') == 'true';
-		
 		return (
 			<div id="app">
-				<input type="checkbox" id="darkmode" defaultChecked={dmEnabled} onChange={this.setDarkModeCookie} />
+				<input type="checkbox" id="darkmode"
+					defaultChecked={+window.localStorage.getItem('darkmode')}
+					onChange={this.saveDarkModeState}
+				/>
 				<div className="folded_corner">
 					<label htmlFor="darkmode" className="darkmode-icon" />
 				</div>

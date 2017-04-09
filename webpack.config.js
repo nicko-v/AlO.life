@@ -33,7 +33,8 @@ config.module = {
 
 config.output = {
 	filename: 'app.min.js',
-	path: __dirname + '/app/public'
+	path: __dirname + '/app/public',
+	publicPath: '/'
 };
 
 config.plugins = [HTMLWebpackPluginConfig];

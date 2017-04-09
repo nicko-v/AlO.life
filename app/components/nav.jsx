@@ -1,6 +1,6 @@
 import styles   from '../css/nav.css';
 import React    from 'react';
-import routes   from '../data/routes.jsx';
+import routes   from './routes.jsx';
 import { Link } from 'react-router-dom';
 
 const nbsp = String.fromCharCode(160);

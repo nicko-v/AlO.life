@@ -9,11 +9,12 @@ export default React.createClass({
 		return {
 			events: events.sort(this.compareNumeric),
 			years: events.map((event) => event.date.year).filter((year, i, arr) => arr.indexOf(year) === i),
-			skipYears: []
+			skipYears: window.sessionStorage.getItem('skipYears') ? window.sessionStorage.getItem('skipYears').split(',').map( (year) => +year ) : []
 		};
 	},
 	compareNumeric(a, b) {
-		return new Date(b.date.year, b.date.month - 1, b.date.day) - new Date(a.date.year, a.date.month - 1, a.date.day);
+		const mod = +window.sessionStorage.getItem('timeline-oldFirst') ? -1 : 1;
+		return (new Date(b.date.year, b.date.month - 1, b.date.day) - new Date(a.date.year, a.date.month - 1, a.date.day)) * mod;
 	},
 	reverseList() {
 		this.setState({ events: events.reverse() });
@@ -24,6 +25,10 @@ export default React.createClass({
 		
 		if (pos > -1) { years.splice(pos, 1); } else { years.push(+e.target.value); }
 		this.setState({ skipYears: years });
+		window.sessionStorage.setItem('skipYears', years.join(','));
+	},
+	saveTimelineDirection(e) {
+		window.sessionStorage.setItem('timeline-oldFirst', +e.target.checked);
 	},
 	render() {
 		document.title = 'AlO.life | Хроника';
@@ -44,7 +49,10 @@ export default React.createClass({
 					</div>
 					<div className="timeline-switcher_wrapper">
 						<p className="noselect">Сначала новые</p>
-						<input id="tl-switcher" type="checkbox" />
+						<input id="tl-switcher" type="checkbox"
+							defaultChecked={+window.sessionStorage.getItem('timeline-oldFirst')}
+							onChange={this.saveTimelineDirection}
+						/>
 						<label className="timeline-switcher" onClick={this.reverseList} htmlFor="tl-switcher" />
 					</div>
 				</div>
