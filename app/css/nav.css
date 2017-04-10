@@ -44,6 +44,17 @@ nav {
 	animation-direction: alternate, alternate, alternate, normal, alternate;
 	animation-fill-mode: forwards, forwards, forwards, none, none;
 }
+.nav-sitename {
+	font-family: 'Sofia', cursive;
+	font-size: 26px;
+	width: 80%;
+	color: #900;
+	text-align: center;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 10px;
+	flex-shrink: 0;
+	white-space: nowrap;
+}
 .nav-services {
 	margin-top: 20px;
 	list-style: none;
@@ -87,28 +98,12 @@ nav a {
 	color: inherit;
 }
 
-#nav-greeting {
-	width: 80%;
-	color: #900;
-	text-align: center;
-	border-bottom: 1px solid #ccc;
-	padding-bottom: 10px;
-	word-break: break-all;
-	backface-visibility: hidden;
-	text-overflow: ellipsis;
-	overflow-x: hidden;
-	flex-shrink: 0;
-}
-#nav-greeting > span {
-	white-space: nowrap;
-}
-
 .nav-mobile_SelectServiceLabel, #nav-mobile_selectServiceCheckbox {
 	display: none;
 }
 
 @media (max-width: 900px) {
-	.nav-services, .nav-separator, .pusher, #nav-greeting, #nav-links-separator {
+	.nav-services, .nav-separator, .pusher, .nav-sitename, #nav-links-separator {
 		display: none;
 	}
 	nav {

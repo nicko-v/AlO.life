@@ -17,7 +17,7 @@ export default React.createClass({
 						</svg>
 					</Link>
 				</div>
-				<p id="nav-greeting">Привет, <span>username!</span></p>
+				<p className="nav-sitename">AlO.life</p>
 				<label className="nav-mobile_SelectServiceLabel" htmlFor="nav-mobile_selectServiceCheckbox">Выбрать раздел</label>
 				<input id="nav-mobile_selectServiceCheckbox" type="checkbox" />
 				<ul className="nav-services">

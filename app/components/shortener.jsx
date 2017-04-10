@@ -7,12 +7,20 @@ export default React.createClass({
 		document.title = 'AlO.life | Сокращение ссылок';
 		return (
 			<main className="shortener">
-				<div className="urlField">
-					<input type="text" className="urlField-input" placeholder="Укажите ссылку" />
-					<input type="checkbox" id="shortenerOptions" />
-					<label htmlFor="shortenerOptions" className="urlField-optionsButton icon-cog noselect" title="Настройки" />
+				<input type="checkbox" id="shortener-showOptions" />
+				<div className="shortener-urlField">
+					<input type="text" className="shortener-urlField-input" placeholder="Укажите ссылку" />
+					<label htmlFor="shortener-showOptions" className="shortener-urlField-optionsButton icon-cog noselect" title="Настройки" />
 				</div>
-				<button className="createShortLink noselect">Сократить</button>
+				<div className="shortener-optionsWrapper">
+  				<div className="shortener-options">
+						<div className="shortener-options-url">
+  						<span className="noselect">alo.life/</span>
+							<input type="text" className="shortener-options-input" />
+						</div>
+					</div>
+				</div>
+				<button className="shortener-createLinkButton noselect">Сократить</button>
 			</main>
 		);
 	}
