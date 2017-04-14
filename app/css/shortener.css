@@ -90,11 +90,8 @@
 	align-items: center;
 	font-size: 20px;
 }
-.shortener-options-url {
-	display: flex;
-	align-items: baseline;
-}
 .shortener-options-input {
+	padding-top: 2px; /* Опускает поле ввода вровень со спаном. Позиционирование по базовой линии некорректно работает в Сафари. */
 	background-color: transparent;
 	border: none;
 	border-bottom: 1px solid #ccc;

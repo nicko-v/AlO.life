@@ -14,7 +14,7 @@ export default React.createClass({
 				</div>
 				<div className="shortener-optionsWrapper">
   				<div className="shortener-options">
-						<div className="shortener-options-url">
+						<div>
   						<span className="noselect">alo.life/</span>
 							<input type="text" className="shortener-options-input" />
 						</div>

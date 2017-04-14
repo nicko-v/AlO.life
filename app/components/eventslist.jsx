@@ -28,8 +28,8 @@ export default React.createClass({
 						}
 						<div className="eventslist-icon noselect"><i className={this.chooseIcon(event.type)} /></div>
 						<div className="eventslist-descr">
-							<h3>{event.name}</h3>
-							{event.descr.length > 0 && <p>{event.descr + (event.descr.endsWith('.') ? '' : '.')}</p>}
+							<h3>{event.name.trim().endsWith('.') ? event.name.trim().slice(0, -1) : event.name.trim()}</h3>
+							{event.descr.length > 0 && <p>{event.descr + (event.descr.trim().endsWith('.') ? '' : '.')}</p>}
 					</div>
 					</li> : null
 				)}
