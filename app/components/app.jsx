@@ -1,25 +1,18 @@
-import styles  from '../css/app.css';
-import React   from 'react';
-import Nav     from './nav.jsx';
-import Content from './content.jsx';
-import routes  from './routes.jsx';
+import styles            from '../css/app.css';
+import darkStyles        from '../css/dark-mode.css';
+import React             from 'react';
+import DarkModeSwitch    from './DarkModeSwitch.jsx';
+import Nav               from './Nav.jsx';
+import Content           from './Content.jsx';
+import routes            from './routes.jsx';
 import { Route, Switch } from 'react-router-dom';
 
 
-export default React.createClass({
-	saveDarkModeState(e) {
-		window.localStorage.setItem('darkmode', +e.target.checked);
-	},
+export default class App extends React.Component {
 	render() {
 		return (
 			<div id="app">
-				<input type="checkbox" id="darkmode"
-					defaultChecked={+window.localStorage.getItem('darkmode')}
-					onChange={this.saveDarkModeState}
-				/>
-				<div className="folded_corner">
-					<label htmlFor="darkmode" className="darkmode-icon" />
-				</div>
+				<DarkModeSwitch />
 				<Nav />
 				<Switch>
 					{Object.keys(routes).map((route, index) => (
@@ -34,4 +27,4 @@ export default React.createClass({
 			</div>
 		);
 	}
-});
+}

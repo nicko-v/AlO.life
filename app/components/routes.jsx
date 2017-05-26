@@ -1,10 +1,10 @@
 import React     from 'react';
-import Blog      from '../components/blog.jsx';
-import Shortener from '../components/shortener.jsx';
-import About     from '../components/about.jsx';
-import MainPage  from '../components/mainpage.jsx';
-import Timeline  from '../components/timeline.jsx';
-import NotFound  from '../components/notfound.jsx';
+import Blog      from '../components/Blog.jsx';
+import Shortener from '../components/Shortener.jsx';
+import About     from '../components/About.jsx';
+import MainPage  from '../components/MainPage.jsx';
+import Timeline  from '../components/Timeline.jsx';
+import NotFound  from '../components/NotFound.jsx';
 
 const nbsp = String.fromCharCode(160);
 const servicesPath = '/s';

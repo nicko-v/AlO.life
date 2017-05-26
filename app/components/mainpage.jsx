@@ -1,10 +1,13 @@
-import styles from '../css/mainpage.css';
+import styles from '../css/main-page.css';
 import React  from 'react';
 
 
-export default React.createClass({
-	render() {
+export default class MainPage extends React.Component {
+	componentDidMount() {
 		document.title = 'AlO.life';
+	}
+	
+	render() {
 		return (
 			<main className="mainpage noselect">
 				<h3>Привет!</h3>
@@ -15,4 +18,4 @@ export default React.createClass({
 			</main>
 		);
 	}
-});
+}

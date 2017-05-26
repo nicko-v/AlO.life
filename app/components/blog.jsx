@@ -1,10 +1,14 @@
 import styles   from '../css/blog.css';
 import React    from 'react';
-import BlogPost from './blogpost.jsx';
+import BlogPost from './BlogPost.jsx';
 
-export default React.createClass({
-	render() {
+
+export default class Blog extends React.Component {
+	componentDidMount() {
 		document.title = 'AlO.life | Заметки об игре';
+	}
+	
+	render() {
 		return (
 			<main className="blog">
 				<BlogPost />
@@ -17,4 +21,4 @@ export default React.createClass({
 			</main>
 		);
 	}
-});
+}

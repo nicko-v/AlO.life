@@ -1,24 +1,30 @@
 import styles     from '../css/timeline.css';
 import React      from 'react';
 import events     from '../data/events.js';
-import EventsList from './eventslist.jsx';
+import EventsList from './EventsList.jsx';
 
 
-export default React.createClass({
-	getInitialState() {
-		return {
+export default class Timeline extends React.Component {
+	constructor() {
+		super();
+		this.state = {
 			events: events.sort(this.compareNumeric),
 			years: events.map((event) => event.date.year).filter((year, i, arr) => arr.indexOf(year) === i),
 			skipYears: window.sessionStorage.getItem('skipYears') ? window.sessionStorage.getItem('skipYears').split(',').map( (year) => +year ) : []
 		};
-	},
+		this.reverseList = this.reverseList.bind(this);
+		this.showEventsByYear = this.showEventsByYear.bind(this);
+	}
+	
 	compareNumeric(a, b) {
 		const mod = +window.sessionStorage.getItem('timeline-oldFirst') ? -1 : 1;
 		return (new Date(b.date.year, b.date.month - 1, b.date.day) - new Date(a.date.year, a.date.month - 1, a.date.day)) * mod;
-	},
+	}
+	
 	reverseList() {
 		this.setState({ events: events.reverse() });
-	},
+	}
+	
 	showEventsByYear(e) {
 		let pos   = this.state.skipYears.indexOf(+e.target.value),
 		    years = this.state.skipYears.filter(() => true);
@@ -26,12 +32,17 @@ export default React.createClass({
 		if (pos > -1) { years.splice(pos, 1); } else { years.push(+e.target.value); }
 		this.setState({ skipYears: years });
 		window.sessionStorage.setItem('skipYears', years.join(','));
-	},
+	}
+	
 	saveTimelineDirection(e) {
 		window.sessionStorage.setItem('timeline-oldFirst', +e.target.checked);
-	},
+	}
+	
+	componentDidMount() {
+		document.title = 'AlO.life | Хроника событий';
+	}
+	
 	render() {
-		document.title = 'AlO.life | Хроника';
 		return (
 			<main className="timeline">
 				<div className="timeline-controls">
@@ -60,4 +71,4 @@ export default React.createClass({
 			</main>
 		);
 	}
-});
+}

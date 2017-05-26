@@ -1,20 +1,11 @@
 import React from 'react';
 
 
-export default React.createClass({
-	chooseIcon(type) {
-		switch (type) {
-			case 'объявление': return 'icon-megaphone';
-			case 'основание': return 'icon-home';
-			case 'открытие': return 'icon-key';
-			case 'конец': return 'icon-cancel';
-			case 'ивент': return 'icon-users';
-			default: return 'icon-info';
-		}
-	},
+export default class EventsList extends React.Component {
 	isDateNeccessary(current, previous) {
 		return +new Date(current.year, current.month - 1, current.day) !== +new Date(previous.year, previous.month - 1, previous.day);
-	},
+	}
+	
 	render() {
 		return (
 			<ul className="eventslist">
@@ -26,7 +17,7 @@ export default React.createClass({
 									<h1>{event.date.year}</h1>
 								</div>) : <div className="eventslist-date noselect" />
 						}
-						<div className="eventslist-icon noselect"><i className={this.chooseIcon(event.type)} /></div>
+						<div className="eventslist-icon noselect"><i className={`icon-${event.icon || 'info'}`} /></div>
 						<div className="eventslist-descr">
 							<h3>{event.name.trim().endsWith('.') ? event.name.trim().slice(0, -1) : event.name.trim()}</h3>
 							{event.descr.length > 0 && <p>{event.descr + (event.descr.trim().endsWith('.') ? '' : '.')}</p>}
@@ -37,4 +28,4 @@ export default React.createClass({
 			</ul>
 		);
 	}
-});
+}

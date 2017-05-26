@@ -1,8 +1,8 @@
-import styles from '../css/blogpost.css';
+import styles from '../css/blog-post.css';
 import React  from 'react';
 
 
-export default React.createClass({
+export default class BlogPost extends React.Component {
 	render() {
 		return (
 			<article className="blogpost">
@@ -23,4 +23,4 @@ export default React.createClass({
 			</article>
 		);
 	}
-});
+}

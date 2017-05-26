@@ -15,9 +15,6 @@
 .mainpage > p:last-child {
 	margin-bottom: 0;
 }
-.mainpage a {
-	color: inherit;
-}
 
 @media (max-width: 900px) {
 	.mainpage {

@@ -1,14 +1,16 @@
 import styles from '../css/about.css';
 import React  from 'react';
 
-
-export default React.createClass({
-	render() {
+export default class About extends React.Component {
+	componentDidMount() {
 		document.title = 'AlO.life | О проекте';
+	}
+	
+	render() {
 		return (
 			<main className="about">
 				
 			</main>
 		);
 	}
-});
+}

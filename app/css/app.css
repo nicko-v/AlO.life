@@ -1,7 +1,6 @@
 @import "fonts.css";
 @import "fontello.css";
 @import "animations.css";
-@import "darkmode.css";
 
 *::selection {
 	background-color: #aaa;
@@ -40,6 +39,11 @@ a::before {
 }
 a:hover::before {
 	width: 100%;
+}
+button, button:active {
+	outline: none;
+	border: none;
+	color: inherit;
 }
 
 .aNoAnim {

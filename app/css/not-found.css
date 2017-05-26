@@ -27,6 +27,7 @@
 .notfound > p {
 	width: 80%;
 	max-width: 500px;
+	color: #777;
 }
 
 @media (max-width: 900px) {

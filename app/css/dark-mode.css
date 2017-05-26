@@ -1,0 +1,118 @@
+header {
+	border-bottom: 1px solid #555;
+}
+footer {
+	border-top: 1px solid #555;
+	color: #777;
+}
+nav {
+	border-right: 1px solid #555;
+	background-color: #444;
+}
+.nav-cape {
+	background-color: #333;
+}
+.nav-sitename {
+	border-bottom: 1px solid #555;
+}
+.nav-services > li:hover {
+	background-color: #555;
+}
+.darkmode-icon {
+	transform: rotate(540deg);
+}
+.content {
+	background-color: #222;
+}
+.notfound > hr {
+	background-color: #555;
+}
+.blogpost-header {
+	border-bottom: 1px solid #555;
+}
+.blogpost-header-title {
+	color: #aaa;
+}
+.blogpost-header-time {
+	color: #444;
+}
+.blogpost-manage > li {
+	color: #777;
+}
+.eventslist-date::after {
+	background-color: #999;
+}
+.eventslist-date > h1 {
+	color: #777;
+}
+.eventslist-icon {
+	background-color: #333;
+}
+.eventslist-descr {
+	background-color: #999;
+	color: #444;
+}
+.eventslist-descr > p {
+	border-top: 1px solid #777;
+}
+.eventslist > li:nth-last-child(2) > .eventslist-descr::before {
+	background-image: linear-gradient(to bottom, #900, #222);
+}
+.eventslist > li:nth-child(2n) > .eventslist-descr {
+	background-color: #ccc;
+}
+.eventslist > li:nth-child(2n) > .eventslist-date::after {
+	background-color: #ccc;
+}
+.shortener-urlField-input {
+	transition: all 0s ease 0s;
+	border: 1px solid #555;
+}
+.shortener-urlField-input:focus {
+	border: 1px solid #777;
+	box-shadow: 0 2px 5px 0px rgba(200, 200, 200, 0.1);
+}
+.shortener-urlField-input::-webkit-input-placeholder {
+	color: #555;
+}
+.shortener-urlField-input::-moz-placeholder {
+	color: #555;
+}
+.shortener-urlField-input::-ms-input-placeholder {
+	color: #555;
+}
+.shortener-urlField-input:-ms-input-placeholder {
+	color: #555;
+}
+.button {
+	transition: all 0s ease 0s;
+	border: 1px solid #555;
+}
+.button:hover {
+	border: 1px solid #777;
+}
+.button:active {
+	box-shadow: 0 0 5px 1px rgba(200, 200, 200, 0.1);
+}
+.shortener-optionsWrapper {
+	background-color: #444;
+}
+.shortener-options {
+	border-top: 2px dashed #555;
+	border-bottom: 2px dashed #555;
+}
+.shortener-options-input {
+	border-bottom: 1px solid #777;
+}
+
+@media (max-width: 900px) {
+	nav {
+		border-right: none;
+		border-bottom: 1px solid #555;
+	}
+	.nav-services {
+		background-color: #444;
+		border: 1px solid #555;
+		border-top: none;
+	}
+}

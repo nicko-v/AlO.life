@@ -6,9 +6,6 @@
 	align-items: center;
 	overflow-x: hidden;
 }
-#shortener-showOptions {
-	display: none;
-}
 .shortener-urlField {
 	display: flex;
 	width: 50%;
@@ -28,45 +25,6 @@
 	outline: none;
 	border: 1px solid #bbb;
 	box-shadow: 0 2px 5px 0px rgba(0, 0, 0, 0.1);
-}
-.shortener-urlField-optionsButton {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100%;
-	font-size: 35px;
-	cursor: pointer;
-	transition: transform 500ms ease-out;
-	transform-origin: center;
-	margin-left: 10px;
-}
-.shortener-urlField-optionsButton:hover {
-	transform: rotate(90deg);
-}
-.shortener-urlField-optionsButton:active {
-	color: #555;
-}
-.shortener-createLinkButton {
-	margin: 0;
-	padding: 0;
-	width: 200px;
-	height: 50px;
-	font-size: 20px;
-	color: #777;
-	background-color: transparent;
-	border: 1px solid #ccc;
-	border-radius: 2px;
-	cursor: pointer;
-	transition: border 250ms ease-out;
-}
-.shortener-createLinkButton:focus {
-	outline: none;
-}
-.shortener-createLinkButton:hover {
-	border: 1px solid #aaa;
-}
-.shortener-createLinkButton:active {
-	box-shadow: inset 0 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 .shortener-optionsWrapper {
 	width: calc(100% + 6px);
@@ -110,12 +68,6 @@
 .shortener-options-input:focus {
 	outline: none;
 	border-bottom: 1px solid #bbb;
-}
-#shortener-showOptions:checked ~ .shortener-urlField .shortener-urlField-optionsButton {
-	color: #555;
-}
-#shortener-showOptions:checked ~ .shortener-optionsWrapper {
-	height: 150px;
 }
 
 @media (max-width: 900px) {

@@ -1,10 +1,13 @@
-import styles from '../css/notfound.css';
+import styles from '../css/not-found.css';
 import React  from 'react';
 
 
-export default React.createClass({
-	render() {
+export default class NotFound extends React.Component {
+	componentDidMount() {
 		document.title = 'AlO.life | Страница не найдена';
+	}
+	
+	render() {
 		return (
 			<main className="notfound noselect">
 				<h1>404</h1>
@@ -14,4 +17,4 @@ export default React.createClass({
 			</main>
 		);
 	}
-});
+}

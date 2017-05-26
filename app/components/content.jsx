@@ -1,10 +1,10 @@
 import styles from '../css/content.css';
 import React  from 'react';
-import Header from './header.jsx';
-import Footer from './footer.jsx';
+import Header from './Header.jsx';
+import Footer from './Footer.jsx';
 
 
-export default React.createClass({
+export default class Content extends React.Component {
 	render() {
 		return (
 			<div className="content">
@@ -14,4 +14,4 @@ export default React.createClass({
 			</div>
 		);
 	}
-});
+}
