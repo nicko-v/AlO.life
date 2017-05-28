@@ -5,19 +5,21 @@ const darkStyleSheet = document.styleSheets[document.styleSheets.length - 1];
 
 
 export default class DarkModeSwitch extends React.Component {
-	switchDarkMode() {
+	toggleDarkMode() {
 		darkStyleSheet.disabled = !darkStyleSheet.disabled;
-		window.localStorage.setItem('darkModeOff', +darkStyleSheet.disabled);
+		window.localStorage.setItem('dark-mode', JSON.stringify(!darkStyleSheet.disabled));
 	}
 	
 	componentWillMount() {
-		darkStyleSheet.disabled = +window.localStorage.getItem('darkModeOff');
+		const storedState = JSON.parse(window.localStorage.getItem('dark-mode'));
+		
+		darkStyleSheet.disabled = !storedState;
 	}
 	
 	render() {
 		return (
 			<div className="folded_corner">
-				<div className="darkmode-icon" onClick={this.switchDarkMode} />
+				<div className="darkmode-icon" onClick={this.toggleDarkMode} />
 			</div>
 		);
 	}

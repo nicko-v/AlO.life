@@ -11,25 +11,25 @@ export default class Nav extends React.Component {
 		super();
 		
 		this.state = {
-			menuExpanded: false
+			dropdownIsActive: false
 		};
 		
-		this.handleSelectServiceClick = this.handleSelectServiceClick.bind(this);
-		this.closeMenu = this.closeMenu.bind(this);
+		this.toggleDropdown = this.toggleDropdown.bind(this);
+		this.closeDropdown = this.closeDropdown.bind(this);
 	}
 	
-	handleSelectServiceClick() {
-		this.setState({ menuExpanded: !this.state.menuExpanded });
+	toggleDropdown() {
+		this.setState({ dropdownIsActive: !this.state.dropdownIsActive });
 	}
 	
-	closeMenu() {
-		this.setState({ menuExpanded: false });
+	closeDropdown() {
+		this.setState({ dropdownIsActive: false });
 	}
 	
 	render() {
 		return (
 			<nav className="noselect">
-				<button className="nav-mobile_selectService" onClick={this.handleSelectServiceClick}>Выбрать раздел</button>
+				<button className="nav-mobile_selectService" onClick={this.toggleDropdown}>Выбрать раздел</button>
 				<div className="nav-cape">
 					<Link to={routes.main.path} title="На главную" className="aNoAnim">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" className="nav-cape-heart">
@@ -38,7 +38,7 @@ export default class Nav extends React.Component {
 					</Link>
 				</div>
 				<p className="nav-sitename">AlO.life</p>
-				<ul className="nav-services" style={{ display: this.state.menuExpanded ? 'block' : '' }} onClick={this.closeMenu}>
+				<ul className="nav-services" style={{ display: this.state.dropdownIsActive ? 'block' : '' }} onClick={this.closeDropdown}>
 					<li><Link to={routes.blog.path} className="aNoAnim">Заметки об{nbsp}игре</Link></li>
 					<li><Link to={routes.timeline.path} className="aNoAnim">Хроника событий</Link></li>
 					<li><Link to={routes.shortener.path} className="aNoAnim">Сокращение ссылок</Link></li>

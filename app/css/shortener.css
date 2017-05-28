@@ -26,6 +26,12 @@
 	border: 1px solid #bbb;
 	box-shadow: 0 2px 5px 0px rgba(0, 0, 0, 0.1);
 }
+.shortener-urlField-cog {
+	font-size: 35px;
+}
+.shortener-urlField-cog_active {
+	color: #555;
+}
 .shortener-optionsWrapper {
 	width: calc(100% + 6px);
 	height: 0;
@@ -35,6 +41,9 @@
 	box-shadow: inset 0 0 3px 3px rgba(0,0,0,0.1);
 	overflow: hidden;
 	transition: height 400ms linear;
+}
+.shortener-optionsWrapper_expanded {
+	height: 150px;
 }
 .shortener-options {
 	width: 100%;

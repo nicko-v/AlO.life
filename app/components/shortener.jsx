@@ -9,18 +9,18 @@ export default class Shortener extends React.Component {
 		super();
 		
 		this.state = {
-			showOptions: false
+			expanded: false
 		};
 		
-		this.handleCogButtonClick = this.handleCogButtonClick.bind(this);
+		this.rollOptionsBlock = this.rollOptionsBlock.bind(this);
 	}
 	
 	componentDidMount() {
 		document.title = 'AlO.life | Сокращение ссылок';
 	}
 	
-	handleCogButtonClick() {
-		this.setState({ showOptions: !this.state.showOptions });
+	rollOptionsBlock() {
+		this.setState({ expanded: !this.state.expanded });
 	}
 	
 	handleButtonClick() {
@@ -32,9 +32,9 @@ export default class Shortener extends React.Component {
 			<main className="shortener">
 				<div className="shortener-urlField">
 					<input type="text" className="shortener-urlField-input" placeholder="Укажите ссылку" />
-					<CogButton title="Настройки" style={{ color: this.state.showOptions ? '#555' : '', fontSize: '35px'}} onClick={this.handleCogButtonClick} />
+					<CogButton title="Настройки" className="shortener-urlField-cog" isActive={this.state.expanded} onClick={this.rollOptionsBlock} />
 				</div>
-				<div className="shortener-optionsWrapper" style={{ height: this.state.showOptions ? '150px' : 0 }}>
+				<div className={`shortener-optionsWrapper ${(this.state.expanded ? ' shortener-optionsWrapper_expanded' : '')}`}>
   				<div className="shortener-options">
 						<div>
   						<span className="noselect">alo.life/</span>

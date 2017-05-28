@@ -1,41 +1,54 @@
-import styles     from '../css/timeline.css';
-import React      from 'react';
-import events     from '../data/events.js';
-import EventsList from './EventsList.jsx';
+import styles        from '../css/timeline.css';
+import React         from 'react';
+import events        from '../data/events.js';
+import Toggle        from './Toggle.jsx';
+import EventsList    from './EventsList.jsx';
+import TimelineYears from './TimelineYears.jsx';
 
 
 export default class Timeline extends React.Component {
 	constructor() {
-		super();
-		this.state = {
-			events: events.sort(this.compareNumeric),
-			years: events.map((event) => event.date.year).filter((year, i, arr) => arr.indexOf(year) === i),
-			skipYears: window.sessionStorage.getItem('skipYears') ? window.sessionStorage.getItem('skipYears').split(',').map( (year) => +year ) : []
-		};
-		this.reverseList = this.reverseList.bind(this);
-		this.showEventsByYear = this.showEventsByYear.bind(this);
-	}
-	
-	compareNumeric(a, b) {
-		const mod = +window.sessionStorage.getItem('timeline-oldFirst') ? -1 : 1;
-		return (new Date(b.date.year, b.date.month - 1, b.date.day) - new Date(a.date.year, a.date.month - 1, a.date.day)) * mod;
-	}
-	
-	reverseList() {
-		this.setState({ events: events.reverse() });
-	}
-	
-	showEventsByYear(e) {
-		let pos   = this.state.skipYears.indexOf(+e.target.value),
-		    years = this.state.skipYears.filter(() => true);
+		let storedNewestFirst = JSON.parse(window.sessionStorage.getItem('timeline-newest-first'));
+		let storedYears       = JSON.parse(window.sessionStorage.getItem('timeline-show-by-year'));
+		let yearsList = new Set(events.map( (event) => event.date.year ));
 		
-		if (pos > -1) { years.splice(pos, 1); } else { years.push(+e.target.value); }
-		this.setState({ skipYears: years });
-		window.sessionStorage.setItem('skipYears', years.join(','));
+		super();
+		
+		 /* Временно. Массив должен запрашиваться из базы в нужной сортировке согласно сохраненным настройкам. */
+		if (storedNewestFirst === false) { events.reverse(); }
+		/* -=-=-=- */
+		
+		this.state = {
+			events: events,
+			newestFirst: storedNewestFirst === null ? true : storedNewestFirst,
+			years: new function () {
+				for (let year of yearsList) {
+					this[year] = (storedYears !== null && storedYears[year] !== undefined) ? storedYears[year] : true;
+				}
+			}
+		};
+		
+		this.toggleTimeline = this.toggleTimeline.bind(this);
+		this.toggleYear = this.toggleYear.bind(this);
 	}
 	
-	saveTimelineDirection(e) {
-		window.sessionStorage.setItem('timeline-oldFirst', +e.target.checked);
+	toggleTimeline() {
+		window.sessionStorage.setItem('timeline-newest-first', JSON.stringify(!this.state.newestFirst));
+		
+		this.setState({
+			newestFirst: !this.state.newestFirst,
+			events: this.state.events.reverse()
+		});
+	}
+	
+	toggleYear(e) {
+		let years = this.state.years;
+		
+		years[e.target.dataset.year] = !years[e.target.dataset.year];
+		
+		this.setState({ years: years });
+		
+		window.sessionStorage.setItem('timeline-show-by-year', JSON.stringify(years));
 	}
 	
 	componentDidMount() {
@@ -46,28 +59,13 @@ export default class Timeline extends React.Component {
 		return (
 			<main className="timeline">
 				<div className="timeline-controls">
-					<div className="timeline-yearChoice noselect">
-						<p>Показать за год:</p>
-						<div className="timeline-years">
-							{this.state.years.map((year, index) =>
-								<span key={index}>
-									<input id={`tl-y${year}`} value={year} type="checkbox" onChange={this.showEventsByYear} />
-									<label htmlFor={`tl-y${year}`}>{year}</label>
-									<div className="timeline-years-underline" style={this.state.skipYears.indexOf(year) > -1 ? { left: "-100%", bottom: "40%", transform: "translateX(100%)" } : {}} />
-								</span>
-							)}
-						</div>
-					</div>
-					<div className="timeline-switcher_wrapper">
+					<TimelineYears years={this.state.years} onClick={this.toggleYear} />
+					<div className="timeline-toggle_wrapper">
 						<p className="noselect">Сначала новые</p>
-						<input id="tl-switcher" type="checkbox"
-							defaultChecked={+window.sessionStorage.getItem('timeline-oldFirst')}
-							onChange={this.saveTimelineDirection}
-						/>
-						<label className="timeline-switcher" onClick={this.reverseList} htmlFor="tl-switcher" />
+						<Toggle isActive={this.state.newestFirst} onClick={this.toggleTimeline} />
 					</div>
 				</div>
-				<EventsList events={this.state.events} skip={this.state.skipYears} />
+				<EventsList events={this.state.events.filter( (event) => this.state.years[event.date.year] )} />
 			</main>
 		);
 	}

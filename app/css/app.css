@@ -40,10 +40,13 @@ a::before {
 a:hover::before {
 	width: 100%;
 }
-button, button:active {
-	outline: none;
+button {
 	border: none;
 	color: inherit;
+	font-size: inherit;
+}
+button:active {
+	outline: none;
 }
 
 .aNoAnim {

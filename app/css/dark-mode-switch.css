@@ -6,7 +6,7 @@
 	height: 30px;
 	background-image: linear-gradient(to top right, #fff 50%, #bbb 55%, #ccc 60%);
 	box-shadow: 0 0 5px 4px rgba(0, 0, 0, 0.2);
-	transition: all 300ms ease-out;
+	transition: width 300ms ease-out, height 300ms ease-out;
 	border-bottom-left-radius: 3px;
 	overflow: hidden;
 	z-index: 1;
