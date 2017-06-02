@@ -38,7 +38,7 @@ export default class Nav extends React.Component {
 					</Link>
 				</div>
 				<p className="nav-sitename">AlO.life</p>
-				<ul className="nav-services" style={{ display: this.state.dropdownIsActive ? 'block' : '' }} onClick={this.closeDropdown}>
+				<ul className={`nav-services ${this.state.dropdownIsActive ? 'nav-services_expanded' : 'nav-services_collapsed' }`} onClick={this.closeDropdown}>
 					<li><Link to={routes.blog.path} className="aNoAnim">Заметки об{nbsp}игре</Link></li>
 					<li><Link to={routes.timeline.path} className="aNoAnim">Хроника событий</Link></li>
 					<li><Link to={routes.shortener.path} className="aNoAnim">Сокращение ссылок</Link></li>

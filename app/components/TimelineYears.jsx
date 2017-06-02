@@ -8,8 +8,7 @@ export default class TimelineYears extends React.Component {
 				<p>Показать за год:</p>
 				<div className="timeline-years">
 					{Object.keys(this.props.years).map((year, index) =>
-						<span className={`timeline-years-year ${this.props.years[year] ? 'timeline-years-line_under' : 'timeline-years-line_over'}`} key={index} data-year={year} onClick={this.props.onClick}>{year}</span>
-					)}
+						<span className={`timeline-years-year ${this.props.years[year] ? 'timeline-years-line_under' : 'timeline-years-line_over'}`} key={index} data-year={year} onClick={this.props.onClick}>{year}</span>)}
 				</div>
 			</div>
 		);

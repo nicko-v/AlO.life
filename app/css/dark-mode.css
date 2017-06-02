@@ -1,3 +1,6 @@
+html {
+	background-color: #222;
+}
 header {
 	border-bottom: 1px solid #555;
 }
@@ -20,9 +23,6 @@ nav {
 }
 .darkmode-icon {
 	transform: rotate(540deg);
-}
-.content {
-	background-color: #222;
 }
 .notfound > hr {
 	background-color: #555;

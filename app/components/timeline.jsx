@@ -1,6 +1,5 @@
 import styles        from '../css/timeline.css';
 import React         from 'react';
-import events        from '../data/events.js';
 import Toggle        from './Toggle.jsx';
 import EventsList    from './EventsList.jsx';
 import TimelineYears from './TimelineYears.jsx';
@@ -9,23 +8,13 @@ import TimelineYears from './TimelineYears.jsx';
 export default class Timeline extends React.Component {
 	constructor() {
 		let storedNewestFirst = JSON.parse(window.sessionStorage.getItem('timeline-newest-first'));
-		let storedYears       = JSON.parse(window.sessionStorage.getItem('timeline-show-by-year'));
-		let yearsList = new Set(events.map( (event) => event.date.year ));
 		
 		super();
 		
-		 /* Временно. Массив должен запрашиваться из базы в нужной сортировке согласно сохраненным настройкам. */
-		if (storedNewestFirst === false) { events.reverse(); }
-		/* -=-=-=- */
-		
 		this.state = {
-			events: events,
 			newestFirst: storedNewestFirst === null ? true : storedNewestFirst,
-			years: new function () {
-				for (let year of yearsList) {
-					this[year] = (storedYears !== null && storedYears[year] !== undefined) ? storedYears[year] : true;
-				}
-			}
+			events: [],
+			years: {}
 		};
 		
 		this.toggleTimeline = this.toggleTimeline.bind(this);
@@ -53,6 +42,43 @@ export default class Timeline extends React.Component {
 	
 	componentDidMount() {
 		document.title = 'AlO.life | Хроника событий';
+		
+		let storedYears = JSON.parse(window.sessionStorage.getItem('timeline-show-by-year'));
+		let xhr = new XMLHttpRequest();
+
+		xhr.open('GET', `?q=eventslist&newest=${+this.state.newestFirst}`);
+		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+		xhr.addEventListener('readystatechange', () => {
+			if (xhr.readyState != 4) { return; }
+			
+			if (xhr.status == 200 && xhr.responseText.length) {
+				let events = JSON.parse(xhr.responseText).map( (event) => {
+					return {
+						name: event.name,
+						descr: event.descr || '',
+						icon: event.icon || 'info',
+						date: {
+							year:  new Date(event.date).getFullYear(),
+							month: new Date(event.date).getMonth() + 1,
+							day:   new Date(event.date).getDate()
+						}
+					};
+				} );
+				let yearsList = new Set(events.map( (event) => event.date.year ));
+				
+				this.setState({
+					events: events,
+					years: new function () {
+						for (let year of yearsList) {
+							this[year] = (storedYears !== null && storedYears[year] !== undefined) ? storedYears[year] : true;
+						}
+					}
+				});
+			} else {
+				console.log(`Ошибка при получении списка событий. \n${xhr.status}: ${xhr.statusText}. \n${xhr.responseText}`);
+			}
+		});
+		xhr.send();
 	}
 	
 	render() {

@@ -132,7 +132,6 @@ nav a {
 		background-color: transparent;
 	}
 	.nav-services {
-		display: none;
 		width: 30%;
 		position: absolute;
 		top: 80px;
@@ -147,6 +146,12 @@ nav a {
 		border-top: none;
 		margin-top: -1px; /* Скрывает border-bottom у navbar в месте наложения */
 		padding-top: 1px; /* Скрывает border-bottom у navbar в месте наложения */
+	}
+	.nav-services_collapsed {
+		display: none;
+	}
+	.nav-services_expanded {
+		display: block;
 	}
 	.nav-services > li {
 		padding: 0 10px;

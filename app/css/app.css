@@ -5,6 +5,13 @@
 *::selection {
 	background-color: #aaa;
 }
+::-webkit-scrollbar {
+	width: 6px;
+}
+::-webkit-scrollbar-thumb {
+	background-color: #777;
+}
+
 html {
 	font-size: 16px;
 	font-family: 'Clear Sans', sans-serif;
@@ -45,7 +52,7 @@ button {
 	color: inherit;
 	font-size: inherit;
 }
-button:active {
+button:active, button:focus {
 	outline: none;
 }
 
