@@ -1,5 +1,5 @@
 *.DS_Store
 node_modules/
 app/public/
-server/credentials.js
+server/id.js
 server/logs/
