@@ -1,6 +1,6 @@
 module.exports = {
 	createConnection() {
-		let ID    = require('./credentials.js');
+		let ID    = require('./id.js');
 		let mysql = require('mysql');
 		
 		return mysql.createConnection({
