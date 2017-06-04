@@ -3,4 +3,4 @@ node_modules/
 app/public/
 server/id.js
 server/logs/
-ssl_keys/
+server/ssl_keys/

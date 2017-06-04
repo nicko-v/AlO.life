@@ -127,7 +127,7 @@ app.get(/^\/(\w|\-)+\/?$/, (req, res) => {
 
 // app.listen(PORT);
 https.createServer({
-	cert: fs.readFileSync(path.resolve(__dirname, '../ssl_keys/fullchain.pem')),
+	cert: fs.readFileSync(path.resolve(__dirname, './ssl_keys/fullchain.pem')),
 	key:  fs.readFileSync(path.resolve(__dirname, './ssl_keys/privkey.pem'))
 }, app).listen(PORT);
 console.log(`Server started on port ${PORT}.`);
