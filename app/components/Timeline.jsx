@@ -75,7 +75,7 @@ export default class Timeline extends React.Component {
 					}
 				});
 			} else {
-				console.log(`Ошибка при получении списка событий. \n${xhr.status}: ${xhr.statusText}. \n${xhr.responseText}`);
+				console.log(`Ошибка при получении списка событий. ${xhr.status}: ${xhr.statusText}.`);
 			}
 		});
 		xhr.send();
