@@ -12,6 +12,7 @@ export default class CogButton extends React.Component {
 			<button
 				className={`noselect icon-cog cog_button ${classes}`}
 				title={this.props.title}
+				type={this.props.type}
 				onClick={this.props.onClick}
 			/>
 		);

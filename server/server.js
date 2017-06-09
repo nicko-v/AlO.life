@@ -15,13 +15,28 @@ let fs          = require('fs');
 let path        = require('path');
 let morgan      = require('morgan');
 let rfs         = require('rotating-file-stream');
-let logger      = require('./logger.js');
-let ID          = require('./id.js');
 let mysql       = require('mysql');
 let helmet      = require('helmet');
+let logger      = require('./logger.js');
+let ID          = require('./id.js');
 
 let app    = express();
 let logDir = path.resolve(__dirname, './logs');
+
+
+function getEventsList(req, res) {
+	let columns = "event_header AS 'name', event_descr AS 'descr', event_icon AS 'icon', event_date AS 'date'";
+	let promise = db(`SELECT ${columns} FROM timeline_events ORDER BY event_date ${+req.query.newest ? 'DESC' : 'ASC'}`);
+	
+	promise.then(
+		result => res.send(result),
+		error  => { res.status(500); logger(error, 'error'); }
+	);
+}
+function shortenURL(req, res) {
+	const FULLURL  = req.query.fullURL;
+	const SHORTURL = req.query.shortURL || undefined;
+}
 
 
 app.use(helmet());
@@ -84,22 +99,12 @@ app.use(morgan(morgan.compile(LOGFORMAT), { stream: accessLogStream }));
 /* Маршрутизация */
 // Адрес вида "site.com/s/abc". Это основные страницы сайта. Отдается index.html для дальнейшей маршрутизации на фронте.
 app.get(/^\/((s\/)(\w+)?(\/)?)?$/, (req, res) => {
-	
-	function getEventsList(req, res) {
-		let columns = "event_header AS 'name', event_descr AS 'descr', event_icon AS 'icon', event_date AS 'date'";
-		let promise = db(`SELECT ${columns} FROM timeline_events ORDER BY event_date ${+req.query.newest ? 'DESC' : 'ASC'}`);
-		
-		promise.then(
-			result => res.send(result),
-			error  => { res.status(500); logger(error, 'error'); }
-		);
-	}
-	
 	if (Object.keys(req.query).length === 0) { // Если в адресе нет параметров GET запроса.
 		res.sendFile(path.resolve(__dirname, '../app/public/index.html'));
 	} else {
 		switch (req.query.q) {
 			case 'eventslist': getEventsList(req, res); break;
+			case 'shortenURL': shortenURL(req, res); break;
 		}
 	}
 	
@@ -108,7 +113,7 @@ app.get(/^\/((s\/)(\w+)?(\/)?)?$/, (req, res) => {
 // Адреса вида "site.com/abc". Такие адреса генерирует сокращалка. Редирект на полный адрес, либо возврат index.html, если запись не найдена.
 app.get(/^\/(\w|\-)+\/?$/, (req, res) => {
 	
-	const PATH  = req.path.slice(1);
+	const PATH = req.path.slice(1);
 	
 	db(`SELECT url_full FROM shortened_urls WHERE url_short = '${PATH}' LIMIT 1`)
 		.then(result => {
@@ -125,9 +130,9 @@ app.get(/^\/(\w|\-)+\/?$/, (req, res) => {
 /* -=-=-=- */
 
 
-// app.listen(PORT);
-https.createServer({
+app.listen(PORT);
+/*https.createServer({
 	cert: fs.readFileSync(path.resolve(__dirname, './ssl_keys/fullchain.pem')),
 	key:  fs.readFileSync(path.resolve(__dirname, './ssl_keys/privkey.pem'))
-}, app).listen(PORT);
+}, app).listen(PORT);*/
 console.log(`Server started on port ${PORT}.`);

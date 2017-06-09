@@ -1,6 +1,7 @@
 @import "fonts.css";
-@import "fontello.css";
 @import "animations.css";
+@import "fontello.css";
+@import "animate.css";
 
 *::selection {
 	background-color: #aaa;
