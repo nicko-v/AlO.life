@@ -64,24 +64,24 @@ nav {
 .eventslist > li:nth-child(2n) > .eventslist-date::after {
 	background-color: #ccc;
 }
-.shortener-urlField-input {
+.shortener-form-urlField-input {
 	transition: all 0s ease 0s;
 	border: 1px solid #555;
 }
-.shortener-urlField-input:focus {
+.shortener-form-urlField-input:focus {
 	border: 1px solid #777;
 	box-shadow: 0 2px 5px 0px rgba(200, 200, 200, 0.1);
 }
-.shortener-urlField-input::-webkit-input-placeholder {
+.shortener-form-urlField-input::-webkit-input-placeholder {
 	color: #555;
 }
-.shortener-urlField-input::-moz-placeholder {
+.shortener-form-urlField-input::-moz-placeholder {
 	color: #555;
 }
-.shortener-urlField-input::-ms-input-placeholder {
+.shortener-form-urlField-input::-ms-input-placeholder {
 	color: #555;
 }
-.shortener-urlField-input:-ms-input-placeholder {
+.shortener-form-urlField-input:-ms-input-placeholder {
 	color: #555;
 }
 .button {
@@ -94,14 +94,14 @@ nav {
 .button:active {
 	box-shadow: 0 0 5px 1px rgba(200, 200, 200, 0.1);
 }
-.shortener-optionsWrapper {
+.shortener-form-optionsWrapper {
 	background-color: #444;
 }
-.shortener-options {
+.shortener-form-options {
 	border-top: 2px dashed #555;
 	border-bottom: 2px dashed #555;
 }
-.shortener-options-input {
+.shortener-form-options-input {
 	border-bottom: 1px solid #777;
 }
 

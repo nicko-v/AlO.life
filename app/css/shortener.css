@@ -92,7 +92,7 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	padding: 10%;
+	padding: 10px;
 	text-align: center;
 }
 .shortener-result-success {
