@@ -86,20 +86,31 @@
 	outline: none;
 	border-bottom: 1px solid #bbb;
 }
-.shortener-result {
-	margin-top: 70px;
+.shortener-message {
+	margin: 70px 20px 0 20px;
 	font-size: 20px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	padding: 10px;
 	text-align: center;
 }
-.shortener-result-success {
+.shortener-message-header-success {
 	color: #090;
 }
-.shortener-result-error {
+.shortener-message-header-error {
 	color: #900;
+}
+.shortener-message-content {
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: center;
+	margin-top: 10px;
+}
+.shortener-message-content > a {
+	max-width: 100%;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.shortener-message-content > a:last-child {
+	margin-bottom: 10px;
 }
 
 @media (max-width: 900px) {

@@ -15,7 +15,7 @@ export default class EventsList extends React.Component {
 						<div className="eventslist-descr">
 							<h3>{event.name.trim().endsWith('.') ? event.name.trim().slice(0, -1) : event.name.trim()}</h3>
 							{event.descr.length > 0 && <p>{event.descr + (event.descr.trim().endsWith('.') ? '' : '.')}</p>}
-					</div>
+						</div>
 					</li>
 				)}
 				<li className="noselect">Событий нет</li>

@@ -2,11 +2,27 @@ import styles    from '../css/shortener.css';
 import React     from 'react';
 import Button    from './Button.jsx'
 import CogButton from './CogButton.jsx'
-import { Link }  from 'react-router-dom';
 
 
 function Message(props) {
-	return <p className={`shortener-result ${props.error ? 'shortener-result-error' : 'shortener-result-success animated fadeInDown'}`}>{props.content}</p>;
+	if (props.result.length) {
+		return (
+			<div className="shortener-message">
+				<p className="shortener-message-header-success noselect animated fadeIn">Ссылка сокращена:</p>
+				<div className="shortener-message-content">
+					{ props.result.map( (url, index) => <a className="animated fadeInRight" href={url} target="_blank" key={index}>{url.replace(/^http(s)?:\/\//, '')}</a> ) }
+				</div>
+			</div>
+		);
+	}
+	if (props.error.length) {
+		return (
+			<div className="shortener-message">
+				<p className="shortener-message-header-error">{props.error}</p>
+			</div>
+		);
+	}
+	return null;
 }
 
 export default class Shortener extends React.Component {
@@ -22,9 +38,9 @@ export default class Shortener extends React.Component {
 			aliasInputAnimation: '',
 			urlAnimationTimeout: '',
 			aliasAnimationTimeout: '',
-			spoilerExpanded: false,
-			message: '',
-			error: false
+			isSpoilerExpanded: false,
+			result: [],
+			error: ''
 		};
 		
 		this.toggleSpoiler     = this.toggleSpoiler.bind(this);
@@ -38,7 +54,7 @@ export default class Shortener extends React.Component {
 	}
 	
 	toggleSpoiler() {
-		this.setState({ spoilerExpanded: !this.state.spoilerExpanded });
+		this.setState({ isSpoilerExpanded: !this.state.isSpoilerExpanded });
 	}
 	
 	handleInputChange(event) {
@@ -78,8 +94,8 @@ export default class Shortener extends React.Component {
 			if (url.length > MAX_URL_LENGTH) { throw new WrongInput('url', `Длина ссылки не должна превышать ${MAX_URL_LENGTH} символ${wordEnding(MAX_URL_LENGTH)}.`); }
 			
 			if (alias.length > MAX_ALIAS_LENGTH ||
-			    alias.length < MIN_ALIAS_LENGTH) { throw new WrongInput('alias', `Длина названия должна быть от ${MIN_ALIAS_LENGTH} до ${MAX_ALIAS_LENGTH} символ${wordEnding(MAX_ALIAS_LENGTH)}.`); }
-			if (!aliasRegexp.test(alias))        { throw new WrongInput('alias', 'Некорректное название. Допустимы символы A-z, А-я, 0-9, -, _'); }
+			   (alias.length > 0 && alias.length < MIN_ALIAS_LENGTH)) { throw new WrongInput('alias', `Длина названия должна быть от ${MIN_ALIAS_LENGTH} до ${MAX_ALIAS_LENGTH} символ${wordEnding(MAX_ALIAS_LENGTH)}.`); }
+			if (!aliasRegexp.test(alias))                             { throw new WrongInput('alias', 'Некорректное название. Допустимы символы A-z, А-я, 0-9, -, _'); }
 			
 			
 			// Добавление протокола для создания корректной ссылки через элемент <a>:
@@ -99,25 +115,27 @@ export default class Shortener extends React.Component {
 		try {
 			validateInput(this.state.url, this.state.alias);
 			
-			xhr.open('GET', `?q=shortenURL&url=${this.state.url}&alias=${this.state.alias}`);
+			xhr.open('GET', `/xhr?q=shorten_url&url=${encodeURIComponent(this.state.url)}&alias=${this.state.alias}`);
 			xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 			xhr.addEventListener('readystatechange', () => {
 				if (xhr.readyState != 4) { return; }
 				try {
 					if (xhr.status == 200 && xhr.responseText.length) {
-						this.setState({ url: '', alias: '', urlWrongInputs: 0, aliasWrongInputs: 0, error: false, message: xhr.responseText });
+						let urls = this.state.result.slice();
+						urls.push(xhr.responseText);
+						this.setState({ url: '', alias: '', urlWrongInputs: 0, aliasWrongInputs: 0, error: '', result: urls });
 					} else {
-						throw new Error(xhr.responseText);
+						throw new Error(xhr.status == 503 ? 'Превышен лимит количества запросов. Пожалуйста, попробуйте позже.' : xhr.responseText);
 					}
 				} catch (error) {
 					this.shakeField(error.where);
-					this.setState({ message: error.message, error: true });
+					this.setState({ result: [], error: error.message });
 				}
 			});
 			xhr.send();
 		} catch (error) {
 			this.shakeField(error.where);
-			this.setState({ message: error.message, error: true });
+			this.setState({ result: [], error: error.message });
 		}
 	}
 	
@@ -134,15 +152,16 @@ export default class Shortener extends React.Component {
 	
 	render() {
 		let urlAttrs = {
-			className:      'shortener-form-urlField-input',
-			autoComplete:   'off',
-			placeholder:    'Укажите ссылку',
-			title:          'Сокращаемый адрес',
-			type:           'url', // С таким типом будет появляться кнопка подстановки домена на мобильных устройствах. Хотя навряд ли кто-то будет писать ссылки вручную.
-			name:           'url',
-			spellCheck:     'false',
-			value:          this.state.url,
-			onChange:       this.handleInputChange
+			className:    'shortener-form-urlField-input',
+			autoComplete: 'off',
+			placeholder:  'Укажите ссылку',
+			title:        'Сокращаемый адрес',
+			type:         'url', // С таким типом будет появляться кнопка подстановки домена на мобильных устройствах. Хотя навряд ли кто-то будет писать ссылки вручную.
+			name:         'url',
+			spellCheck:   false,
+			autoFocus:    true,
+			value:        this.state.url,
+			onChange:     this.handleInputChange
 		};
 		let aliasAttrs = {
 			className:    'shortener-form-options-input',
@@ -158,8 +177,15 @@ export default class Shortener extends React.Component {
 			className: 'shortener-form-urlField-cog',
 			title:     'Настройки',
 			type:      'button',
-			isActive:  this.state.spoilerExpanded,
+			isActive:  this.state.isSpoilerExpanded,
 			onClick:   this.toggleSpoiler
+		};
+		let shortenAttrs = {
+			text:       'Сократить',
+			width:      '200px',
+			height:     '50px',
+			type:       'submit',
+			noValidate: true
 		};
 		
 		return (
@@ -169,7 +195,7 @@ export default class Shortener extends React.Component {
 						<input {...urlAttrs} />
 						<CogButton {...cogAttrs} />
 					</div>
-					<div className={`shortener-form-optionsWrapper ${(this.state.spoilerExpanded ? ' shortener-form-optionsWrapper_expanded' : '')}`}>
+					<div className={`shortener-form-optionsWrapper ${(this.state.isSpoilerExpanded ? ' shortener-form-optionsWrapper_expanded' : '')}`}>
   					<div className="shortener-form-options">
 							<div className={this.state.aliasInputAnimation}>
   							<span className="noselect">alo.life/</span>
@@ -177,9 +203,9 @@ export default class Shortener extends React.Component {
 							</div>
 						</div>
 					</div>
-					<Button text="Сократить" width="200px" height="50px" type="submit" noValidate={true} />
+					<Button {...shortenAttrs} />
 				</form>
-				{this.state.message.length > 0 && <Message error={this.state.error} content={this.state.message} />}
+				<Message error={this.state.error} result={this.state.result} />
 			</main>
 		);
 	}

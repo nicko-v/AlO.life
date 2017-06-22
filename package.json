@@ -1,6 +1,6 @@
 {
   "name": "alo-life",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Blog and useful apps for Altiros Online.",
   "main": "index.jsx",
   "scripts": {

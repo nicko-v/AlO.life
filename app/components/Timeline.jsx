@@ -46,7 +46,7 @@ export default class Timeline extends React.Component {
 		let storedYears = JSON.parse(window.sessionStorage.getItem('timeline-show-by-year'));
 		let xhr = new XMLHttpRequest();
 
-		xhr.open('GET', `?q=eventslist&newest=${+this.state.newestFirst}`);
+		xhr.open('GET', `/xhr?q=events_list&newest=${+this.state.newestFirst}`);
 		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 		xhr.addEventListener('readystatechange', () => {
 			if (xhr.readyState != 4) { return; }

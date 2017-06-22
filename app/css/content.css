@@ -4,7 +4,7 @@
 	flex-direction: column;
 	align-items: center;
 	margin-left: 270px; /* Связано с width у nav */
-	width: 100%;
+	width: calc(100% - 270px); /* Связано с width у nav */
 }
 main { /* Общие свойства для всех подключаемых блоков, остальные в соответствующих файлах */
 	flex-grow: 1; /* Прижимает футер книзу */

@@ -1,6 +1,8 @@
 *.DS_Store
 node_modules/
+out/
 app/public/
 server/id.js
 server/logs/
+server/mysql/
 server/ssl_keys/
