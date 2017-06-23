@@ -1,0 +1,10 @@
+{
+	"apps": [{
+		"name"      : "alo_life",
+		"script"    : "server/server.js",
+		"cwd"       : "./",
+		"watch"     : true,
+		"merge_logs": true,
+		"env"       : { "NODE_ENV": "prod" }
+	}]
+}
