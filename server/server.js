@@ -1,21 +1,22 @@
-const PORT       = 8080;
-const HOSTNAME   = 'alo.life';
-const USE_HTTPS  = true;
-const LOG_FORMAT = 'IP:            :req[X-Forwarded-For]\\r\\n' +
-                   'URL:           :url\\r\\n' +
-                   'Date:          :date[clf]\\r\\n' +
-                   'Method:        :method\\r\\n' +
-                   'Referrer:      :referrer\\r\\n' +
-                   'HTTP:          :http-version\\r\\n' +
-                   'Status:        :status\\r\\n' +
-                   'Response time: :response-time[3] ms\\r\\n' +
-                   'User agent:    :user-agent\\r\\n\\r\\n';
+const HOSTNAME    = 'alo.life';
+const PORT        = 8080;
+const XHR_TIMEOUT = 5000;
+const USE_HTTPS   = process.env.NODE_ENV === 'prod';
+const LOG_FORMAT  = 'IP:            :req[X-Forwarded-For]\\r\\n' +
+                    'URL:           :url\\r\\n' +
+                    'Date:          :date[clf]\\r\\n' +
+                    'Method:        :method\\r\\n' +
+                    'Referrer:      :referrer\\r\\n' +
+                    'HTTP:          :http-version\\r\\n' +
+                    'Status:        :status\\r\\n' +
+                    'Response time: :response-time[3] ms\\r\\n' +
+                    'User agent:    :user-agent\\r\\n\\r\\n';
 
-let express = require('express');
 let https   = require('https');
 let fs      = require('fs');
 let path    = require('path');
 let url     = require('url');
+let express = require('express');
 let morgan  = require('morgan');
 let rfs     = require('rotating-file-stream');
 let mysql   = require('mysql');
@@ -23,8 +24,9 @@ let helmet  = require('helmet');
 let logger  = require('./logger.js');
 let ID      = require('./id.js');
 
-let app    = express();
-let logDir = path.resolve(__dirname, './logs');
+let limitList = new Set();
+let app       = express();
+let logDir    = path.resolve(__dirname, './logs');
 
 let pool = mysql.createPool({
 	connectionLimit: 100,
@@ -33,6 +35,7 @@ let pool = mysql.createPool({
 	user           : ID.login,
 	password       : ID.password
 });
+
 
 /**
 	* @description Функция обращения к БД.
@@ -165,12 +168,29 @@ function shortenURL(query, res) {
 		res.status(400).send(error.message); logger(error.message, 'error');
 	}
 }
+/**
+	* @description Функция проверки наличия IP адреса в ограничительном списке.
+	               Если адрес отсутствует - он вносится в список и добавляется таймаут на его удаление.
+	* @param {String} userIP - IP адрес, с которого сделан запрос.
+	* @returns {Boolean}
+*/
+function isRequestAllowed(userIP) {
+	if (limitList.has(userIP)) {
+		return false;
+	} else {
+		limitList.add(userIP);
+		setTimeout( () => { limitList.delete(userIP); }, XHR_TIMEOUT );
+		return true;
+	}
+}
 function handleXHR(req, res, next) {
+	let userIP = req.headers['X-Forwarded-For'] || req.headers['x-forwarded-for'] || req.ip;
+	
 	if (Object.keys(req.query).length === 0) { next(); return; }
 	
 	switch (req.query.q) {
 		case 'events_list': getEventsList(+req.query.newest, res); break;
-		case 'shorten_url': shortenURL(req.query, res); break;
+		case 'shorten_url': isRequestAllowed(userIP) ? shortenURL(req.query, res) : res.status(503).send(); break;
 		default: res.sendFile(path.resolve(__dirname, '../app/public/index.html'));
 	}
 }
@@ -185,7 +205,7 @@ app.use(helmet.contentSecurityPolicy({
 	}
 }));
 app.use(express.static(path.resolve(__dirname, '../app/public')));
-app.use(/^\/xhr$/, handleXHR); // Адрес вида "site.com/xhr". Сюда направляются все XHR запросы. Отдельный путь позволяет ограничить запросы к базе.
+app.use(/^\/xhr$/, handleXHR); // Адрес вида "site.com/xhr". Сюда для удобства направляются все XHR запросы.
 
 
 /* Логирование запросов к серверу */
@@ -204,7 +224,7 @@ app.get(/^\/((s\/)(\w+)?(\/)?)?$/, (req, res) => {
 	res.sendFile(path.resolve(__dirname, '../app/public/index.html'));
 });
 
-// Адреса вида "site.com/abc". Такие адреса генерирует сокращалка. Редирект на полный адрес, либо возврат index.html, если запись не найдена.
+// Адрес вида "site.com/abc". Такие адреса генерирует сокращалка. Редирект на полный адрес, либо возврат index.html, если запись не найдена.
 app.get(/^\/(\w|\-|%)+\/?$/, (req, res) => {
 	
 	const PATH = decodeURIComponent(req.path.slice(1)).toLowerCase();
@@ -225,4 +245,4 @@ if (USE_HTTPS) {
 } else {
 	app.listen(PORT);
 }
-console.log(`\x1b[45m${new Date().toUTCString()}  -::-  Server started on port ${PORT}.\x1b[0m`);
+console.log(`\x1b[42m${new Date().toUTCString()}  -::-  HTTP${USE_HTTPS ? 's' : ''} server started on port ${PORT}.\x1b[0m`);
