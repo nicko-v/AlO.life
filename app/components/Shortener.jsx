@@ -64,15 +64,15 @@ export default class Shortener extends React.Component {
 	}
 	
 	handleFormSubmit(event) {
-		event.preventDefault();
-		
 		let xhr = new XMLHttpRequest();
 		
 		function validateInput(url, alias) {
-			const MAX_URL_LENGTH   = 1000;
+			/* Изменяется вместе с аналогом на сервере */
+			const MAX_URL_LENGTH   = 2000;
 			const MIN_URL_LENGTH   = 4;
 			const MAX_ALIAS_LENGTH = 50;
 			const MIN_ALIAS_LENGTH = 4;
+			/* -=-=-=- */
 			
 			let urlRegexp   = new RegExp('^([\\w\\-]+?\\.?)+?\\.[\\w\\-]+?$');
 			let aliasRegexp = new RegExp('(^$)|(^[-\\wА-Яа-яёЁ]+?$)');
@@ -112,27 +112,37 @@ export default class Shortener extends React.Component {
 			}
 		}
 		
+		
+		event.preventDefault();
+		
+		xhr.addEventListener('readystatechange', () => {
+			if (xhr.readyState != 4) { return; }
+			try {
+				if (xhr.status == 200 && xhr.responseText.length) {
+					let urls = this.state.result.slice();
+					urls.push(xhr.responseText);
+					this.setState({ url: '', alias: '', urlWrongInputs: 0, aliasWrongInputs: 0, error: '', result: urls });
+				} else {
+					throw new Error(xhr.responseText);
+				}
+			} catch (error) {
+				this.shakeField(error.where);
+				this.setState({ result: [], error: error.message });
+			}
+		});
+		
 		try {
 			validateInput(this.state.url, this.state.alias);
 			
-			xhr.open('GET', `/xhr?q=shorten_url&url=${encodeURIComponent(this.state.url)}&alias=${this.state.alias}`);
+			let data = new FormData();
+			
+			data.append('q', 'shorten_url');
+			data.append('url', this.state.url);
+			data.append('alias', this.state.alias);
+			
+			xhr.open('POST', '/xhr');
 			xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-			xhr.addEventListener('readystatechange', () => {
-				if (xhr.readyState != 4) { return; }
-				try {
-					if (xhr.status == 200 && xhr.responseText.length) {
-						let urls = this.state.result.slice();
-						urls.push(xhr.responseText);
-						this.setState({ url: '', alias: '', urlWrongInputs: 0, aliasWrongInputs: 0, error: '', result: urls });
-					} else {
-						throw new Error(xhr.status == 503 ? 'Превышен лимит количества запросов. Пожалуйста, попробуйте позже.' : xhr.responseText);
-					}
-				} catch (error) {
-					this.shakeField(error.where);
-					this.setState({ result: [], error: error.message });
-				}
-			});
-			xhr.send();
+			xhr.send(data);
 		} catch (error) {
 			this.shakeField(error.where);
 			this.setState({ result: [], error: error.message });

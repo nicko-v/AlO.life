@@ -2,6 +2,6 @@
 app/public/
 node_modules/
 out/
-server/id.js
+server/secret.json
 server/logs/
 server/mysql/

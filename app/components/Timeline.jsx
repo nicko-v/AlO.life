@@ -45,16 +45,14 @@ export default class Timeline extends React.Component {
 		
 		let storedYears = JSON.parse(window.sessionStorage.getItem('timeline-show-by-year'));
 		let xhr = new XMLHttpRequest();
-
-		xhr.open('GET', `/xhr?q=events_list&newest=${+this.state.newestFirst}`);
-		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+		
 		xhr.addEventListener('readystatechange', () => {
 			if (xhr.readyState != 4) { return; }
 			
 			if (xhr.status == 200 && xhr.responseText.length) {
 				let events = JSON.parse(xhr.responseText).map( (event) => {
 					return {
-						name: event.name,
+						name: event.header,
 						descr: event.descr || '',
 						icon: event.icon || 'info',
 						date: {
@@ -78,6 +76,9 @@ export default class Timeline extends React.Component {
 				console.log(`Ошибка при получении списка событий. ${xhr.status}: ${xhr.statusText}.`);
 			}
 		});
+
+		xhr.open('GET', `/xhr?q=events_list&newest=${+this.state.newestFirst}`);
+		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 		xhr.send();
 	}
 	

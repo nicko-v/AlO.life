@@ -11,7 +11,7 @@ export default class EventsList extends React.Component {
 							<p>{new Date(event.date.year, event.date.month - 1, event.date.day).toLocaleString('ru', { day: 'numeric', month: 'long' })}</p>
 							<h1>{event.date.year}</h1>
 						</div>
-						<div className="eventslist-icon noselect"><i className={`icon-${event.icon || 'info'}`} /></div>
+						<div className="eventslist-icon noselect"><i className={`icon-${event.icon}`} /></div>
 						<div className="eventslist-descr">
 							<h3>{event.name.trim().endsWith('.') ? event.name.trim().slice(0, -1) : event.name.trim()}</h3>
 							{event.descr.length > 0 && <p>{event.descr + (event.descr.trim().endsWith('.') ? '' : '.')}</p>}

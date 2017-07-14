@@ -6,37 +6,37 @@ import MainPage  from '../components/MainPage.jsx';
 import Timeline  from '../components/Timeline.jsx';
 import NotFound  from '../components/NotFound.jsx';
 
-const nbsp = String.fromCharCode(160);
-const servicesPath = '/s';
+const NBSP = String.fromCharCode(160);
+const PATH = '/s';
 
 
 export default {
 	main: {
 		path: '/',
 		exact: true,
-		header: `Жизнь в мире Altiros${nbsp}Online`,
+		header: `Жизнь в мире Altiros${NBSP}Online`,
 		content: <MainPage />
 	},
 	blog: {
-		path: `${servicesPath}/blog`,
+		path: `${PATH}/blog`,
 		exact: true,
-		header: `Заметки об${nbsp}игре`,
+		header: `Заметки об${NBSP}игре`,
 		content: <Blog />
 	},
 	shortener: {
-		path: `${servicesPath}/urls`,
+		path: `${PATH}/urls`,
 		exact: true,
 		header: `Сокращение ссылок`,
 		content: <Shortener />
 	},
 	timeline: {
-		path: `${servicesPath}/timeline`,
+		path: `${PATH}/timeline`,
 		exact: true,
-		header: `Хроника заметных${nbsp}событий`,
+		header: `Хроника заметных${NBSP}событий`,
 		content: <Timeline />
 	},
 	about: {
-		path: `${servicesPath}/about`,
+		path: `${PATH}/about`,
 		exact: true,
 		header: `О проекте`,
 		content: <About />
