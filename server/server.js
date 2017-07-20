@@ -1,32 +1,34 @@
 'use strict';
 
-let express    = require('express');
-let fs         = require('fs');
-let helmet     = require('helmet');
-let https      = require('https');
-let multer     = require('multer');
-let mysql      = require('mysql');
-let onFinished = require('on-finished');
-let onHeaders  = require('on-headers');
-let path       = require('path');
-let url        = require('url');
-let log        = require('./log.js');
+let cookieParser = require('cookie-parser');
+let express      = require('express');
+let fs           = require('fs');
+let helmet       = require('helmet');
+let https        = require('https');
+let multer       = require('multer');
+let mysql        = require('mysql');
+let onFinished   = require('on-finished');
+let onHeaders    = require('on-headers');
+let path         = require('path');
+let url          = require('url');
+let log          = require('./log.js');
 
-let app       = express();
-let upload    = multer();
-let limitList = new Set();
+let app      = express();
+let upload   = multer();
+let stopList = {
+	shortener: { users: new Set(), timeout: 5000 }
+};
 
 const PORT                = 8080;
-const XHR_TIMEOUT         = 5000;
 const MAX_LOG_FILE_SIZE   = 1e6; // bytes
 const LOGS_CHECK_INTERVAL = 5; // hours
-const HOSTNAME            = process.env.NODE_ENV === 'prod' ? 'alo.life' : `127.0.0.1:${PORT}`;
 const USE_HTTPS           = process.env.NODE_ENV === 'prod';
-const SECRET_JSON         = path.resolve(__dirname, './secret.json');
+const HOSTNAME            = process.env.NODE_ENV === 'prod' ? 'alo.life' : `127.0.0.1:${PORT}`;
+const COOKIES_DOMAIN      = process.env.NODE_ENV === 'prod' ? `http${USE_HTTPS ? 's' : ''}://${HOSTNAME}` : null;
 const LOGS_DIR            = path.resolve(__dirname, './logs');
 const OLD_LOGS_DIR        = path.resolve(__dirname, './logs/old');
-const ACCESS_LOG          = path.resolve(__dirname, './logs/access.log');
 const STATIC_DIR          = path.resolve(__dirname, '../app/public');
+const SECRET_JSON         = path.resolve(__dirname, './secret.json');
 const INDEX_HTML          = path.resolve(__dirname, '../app/public/index.html');
 const SSL_CERT            = path.resolve(__dirname, '../../ssl_keys/fullchain.pem');
 const SSL_KEY             = path.resolve(__dirname, '../../ssl_keys/privkey.pem');
@@ -175,7 +177,7 @@ function shortenURL(query, res) {
 			db('CALL sp_addUrlWithUserAlias(?, ?)', [address, alias], true).then(
 				resolve => { res.status(200).send(`http${USE_HTTPS ? 's' : ''}://${HOSTNAME}/${query.alias}`); },
 				reject  => {
-					if (reject.search(/duplicate entry/i) > -1) {
+					if (reject.search(/duplicate\sentry/i) > -1) {
 						res.status(400).send(`Сокращение "${query.alias}" уже занято.`);
 					} else {
 						res.status(400).send('Произошла непредвиденная ошибка.');
@@ -194,17 +196,18 @@ function shortenURL(query, res) {
 	}
 }
 /**
-	* @description Функция проверки наличия IP адреса в ограничительном списке.
-	               Если адрес отсутствует - он вносится в список и добавляется таймаут на его удаление.
+	* @description Функция проверки наличия IP адреса в указанном ограничительном списке.
+	               Если адрес отсутствует - он вносится в указанный список и добавляется таймаут на его удаление.
 	* @param {String} userIP - IP адрес, с которого сделан запрос.
+	* @param {String} list - Список, в котором надо искать адрес.
 	* @returns {Boolean}
 */
-function isRequestAllowed(userIP) {
-	if (limitList.has(userIP)) {
+function isRequestAllowed(userIP, list) {
+	if (stopList[list].users.has(userIP)) {
 		return false;
 	} else {
-		limitList.add(userIP);
-		setTimeout( () => { limitList.delete(userIP); }, XHR_TIMEOUT );
+		stopList[list].users.add(userIP);
+		setTimeout( () => { stopList[list].users.delete(userIP); }, stopList[list].timeout );
 		return true;
 	}
 }
@@ -214,7 +217,7 @@ function isRequestAllowed(userIP) {
 	* @returns {Object} Объект со значениями-заглушками.
 */
 function createSecret(path) {
-	let secret = { database: 'alolife', login: 'root', password: '123' };
+	let secret = { database: 'alolife', login: 'alo_life', password: '123' };
 	
 	fs.appendFileSync(path, JSON.stringify(secret));
 	log('No "secret.json" file found. A new one was just created. You must edit it by specifying correct credentials, then relaunch app.', { type: 'warn' });
@@ -290,8 +293,9 @@ function logRequest(req, res, next) {
 		
 		let record = `${[date, ip.padEnd(16), status, resTime.padEnd(10), method.padEnd(7), url.padEnd(30), referrer, userAgent].join('  |  ')}\r\n`;
 		
+		const PATH = path.resolve(LOGS_DIR, './access.log');
 		
-		fs.appendFile(ACCESS_LOG, record, (error) => { if (error) { throw error; } });
+		fs.appendFile(PATH, record, (error) => { if (error) { throw error; } });
 	});
 }
 
@@ -306,7 +310,7 @@ function handleXMLHttpRequest(req, res, next) {
 	
 	switch (body.q) {
 		case 'events_list': getEventsList(+body.newest, res); break;
-		case 'shorten_url': isRequestAllowed(userIP) ? shortenURL(body, res) : res.status(503).send('Превышен лимит количества запросов. Пожалуйста, попробуйте позже.'); break;
+		case 'shorten_url': isRequestAllowed(userIP, 'shortener') ? shortenURL(body, res) : res.status(503).send('Превышен лимит количества запросов. Пожалуйста, попробуйте позже.'); break;
 	}
 }
 function handleShortenedUrlRequest(req, res, next) {
@@ -328,6 +332,7 @@ app.use(helmet.contentSecurityPolicy({
 	}
 }));
 app.use(express.static(STATIC_DIR, { index: false }));
+app.use(cookieParser());
 app.use(logRequest);
 
 

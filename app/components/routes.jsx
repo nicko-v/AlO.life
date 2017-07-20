@@ -1,10 +1,10 @@
-import React     from 'react';
-import Blog      from '../components/Blog.jsx';
-import Shortener from '../components/Shortener.jsx';
-import About     from '../components/About.jsx';
-import MainPage  from '../components/MainPage.jsx';
-import Timeline  from '../components/Timeline.jsx';
-import NotFound  from '../components/NotFound.jsx';
+import React       from 'react';
+import Blog        from '../components/Blog.jsx';
+import Shortener   from '../components/Shortener.jsx';
+import About       from '../components/About.jsx';
+import MainPage    from '../components/MainPage.jsx';
+import Timeline    from '../components/Timeline.jsx';
+import NotFound    from '../components/NotFound.jsx';
 
 const NBSP = String.fromCharCode(160);
 const PATH = '/s';

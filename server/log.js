@@ -14,16 +14,15 @@ function log(message, { type = 'unsorted', toConsole = true, toFile = true } = {
 	
 	const FILE   = path.resolve(__dirname, `logs/${type}.log`);
 	
-	const RED    = '\x1b[41m\x1b[30m';
-	const GREEN  = '\x1b[42m\x1b[30m';
-	const YELLOW = '\x1b[43m\x1b[30m';
-	const WHITE  = '\x1b[47m\x1b[30m';
+	const RED    = '\x1b[31m';
+	const GREEN  = '\x1b[32m';
+	const YELLOW = '\x1b[33m';
 	const RESET  = '\x1b[0m\x1b[0m';
 	
 	const COLOR = (type === 'warn')  ? YELLOW :
-	              (type === 'error') ? RED : WHITE;
+	              (type === 'error') ? RED : '';
 	
-	const MESSAGE = `${new Date().toUTCString()}  |  ${message}`;
+	const MESSAGE = `[${new Date().toUTCString()}] ${message}`;
 	
 	
 	if (toConsole) { console.log(`${COLOR}${MESSAGE}${RESET}`); }

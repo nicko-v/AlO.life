@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/nicko-v/AlO.life#readme",
   "dependencies": {
+    "cookie-parser": "^1.4.3",
     "cross-env": "^5.0.1",
     "express": "^4.15.3",
     "helmet": "^3.6.1",

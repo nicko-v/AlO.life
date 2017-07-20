@@ -9,7 +9,7 @@ export default class MainPage extends React.Component {
 	
 	render() {
 		return (
-			<main className="mainpage noselect">
+			<main className="mainpage">
 				<h3>Привет!</h3>
 				<br />
 				<p>Меня зовут Николай, а это место посвящено игре <a href="https://altiros.net/" target="_blank">Altiros Online</a> – MMORPG с полностью изменяемым миром-песочницей.</p>

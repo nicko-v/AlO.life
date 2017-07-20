@@ -4,4 +4,3 @@ node_modules/
 out/
 server/secret.json
 server/logs/
-server/mysql/
