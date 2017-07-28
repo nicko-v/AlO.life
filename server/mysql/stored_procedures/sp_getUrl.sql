@@ -7,7 +7,7 @@ BEGIN
         EXECUTE statement1 USING @a;
         DEALLOCATE PREPARE statement1;
 
-        PREPARE statement2 FROM 'UPDATE shortened_urls SET asked = asked + 1 WHERE alias = ?';
+        PREPARE statement2 FROM 'UPDATE shortened_urls SET asked = asked + 1, lastAsked = NOW() WHERE alias = ?';
         SET @a = alias;
         EXECUTE statement2 USING @a;
         DEALLOCATE PREPARE statement2;

@@ -1,6 +1,6 @@
 *.DS_Store
-app/public/
+app/build/
 node_modules/
 out/
-server/secret.json
+server/config/secret.json
 server/logs/

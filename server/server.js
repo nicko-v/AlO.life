@@ -1,106 +1,46 @@
 'use strict';
 
-let cookieParser = require('cookie-parser');
-let express      = require('express');
-let fs           = require('fs');
-let helmet       = require('helmet');
-let https        = require('https');
-let multer       = require('multer');
-let mysql        = require('mysql');
-let onFinished   = require('on-finished');
-let onHeaders    = require('on-headers');
-let path         = require('path');
-let url          = require('url');
-let log          = require('./log.js');
+const express        = require('express');
+const expressSession = require('express-session');
+const ems            = require('express-mysql-session');
+const fs             = require('fs');
+const helmet         = require('helmet');
+const https          = require('https');
+const multer         = require('multer');
+const path           = require('path');
+const url            = require('url');
+const config         = require('./config/config.js');
+const DataBase       = require('./modules/database.js');
+const Nestor         = require('./modules/nestor.js');
+const paths          = require('./config/paths.js');
 
-let app      = express();
-let upload   = multer();
-let stopList = {
+
+// Проверка и создание при необходимости ресурсов, исключенных из git:
+if (!fs.existsSync(paths.secret))  { createSecret(paths.secret); }
+
+
+const secret       = JSON.parse(fs.readFileSync(paths.secret));
+const stopList     = {
 	shortener: { users: new Set(), timeout: 5000 }
 };
-
-const PORT                = 8080;
-const MAX_LOG_FILE_SIZE   = 1e6; // bytes
-const LOGS_CHECK_INTERVAL = 5; // hours
-const USE_HTTPS           = process.env.NODE_ENV === 'prod';
-const HOSTNAME            = process.env.NODE_ENV === 'prod' ? 'alo.life' : `127.0.0.1:${PORT}`;
-const COOKIES_DOMAIN      = process.env.NODE_ENV === 'prod' ? `http${USE_HTTPS ? 's' : ''}://${HOSTNAME}` : null;
-const LOGS_DIR            = path.resolve(__dirname, './logs');
-const OLD_LOGS_DIR        = path.resolve(__dirname, './logs/old');
-const STATIC_DIR          = path.resolve(__dirname, '../app/public');
-const SECRET_JSON         = path.resolve(__dirname, './secret.json');
-const INDEX_HTML          = path.resolve(__dirname, '../app/public/index.html');
-const SSL_CERT            = path.resolve(__dirname, '../../ssl_keys/fullchain.pem');
-const SSL_KEY             = path.resolve(__dirname, '../../ssl_keys/privkey.pem');
-
-
-fs.existsSync(LOGS_DIR)     || fs.mkdirSync(LOGS_DIR);
-fs.existsSync(OLD_LOGS_DIR) || fs.mkdirSync(OLD_LOGS_DIR);
-fs.existsSync(SECRET_JSON)  || createSecret(SECRET_JSON);
-
-// Если интервал проверки необходимости ротации > 0, проверка проводится по интервалу, иначе - при каждом изменении файла:
-if (LOGS_CHECK_INTERVAL) {
-	setInterval(() => {
-		let files = getFilesByType(LOGS_DIR, '.log');
-		
-		rotateFiles(files, MAX_LOG_FILE_SIZE, OLD_LOGS_DIR);
-	}, LOGS_CHECK_INTERVAL * 3.6e6);
-} else {
-	fs.watch(LOGS_DIR, (eventType, fileName) => {
-		let file = path.resolve(LOGS_DIR, fileName || '');
-		
-		if (path.extname(file) === '.log') { rotateFiles([file], MAX_LOG_FILE_SIZE, OLD_LOGS_DIR); }
-	});
-}
-
-
-let secret = JSON.parse(fs.readFileSync(SECRET_JSON));
-let pool   = mysql.createPool({
+const app          = express();
+const upload       = multer();
+const MySqlStore   = ems(expressSession);
+const nestor       = new Nestor(paths.logs, paths.logsOld);
+const database     = new DataBase({
 	connectionLimit: 100,
-	host           : 'localhost',
-	database       : secret.database,
-	user           : secret.login,
-	password       : secret.password
+	host: 'localhost',
+	port: 3306,
+	database: secret.database,
+	user:     secret.user,
+	password: secret.password
 });
+const sessionStore = new MySqlStore({}, database.pool);
+
+// Следить за размером логов и делать ротацию:
+nestor.watch(config.maxLogFileSize, config.logsCheckInterval);
 
 
-/**
-	* @description Функция обращения к БД.
-	* @param {String} query - Запрос. Значения могут быть заменены "?" и передаваться отдельно.
-	* @param {Array} values - Значения, замененные в запросе "?", или пустой массив.
-	* @param {Boolean} [allowEmptyResponse=false] - Обязательность возврата результата.
-	* @returns {Promise}
-*/
-function db(query, values, allowEmptyResponse = false) {
-	return new Promise( (resolve, reject) => {
-		
-		pool.getConnection( (error, connection) => {
-			if (error) { reject('Error in connection to database.'); return; } // Ошибка при попытке создания соединения.
-			
-			connection.query(query, values, (error, rows) => {
-				connection.release();
-				
-				// Ошибка запроса к БД:
-				if (error) { reject(error.message); return; }
-				// Данные в ответ не ожидаются:
-				if (allowEmptyResponse) { resolve(); return; }
-				// Данные ожидаются, но не найдены:
-				if (!allowEmptyResponse && rows.length === 0) { reject(`No data found for query "${query}" [${values.join(', ')}]`); return; }
-				
-				/* Данные ожидаются и найдены: */
-				// Ищется объект со строками, он может быть либо в корне массива-ответа, либо обернут в еще один массив:
-				for (let i = 0; i < rows.length; i += 1) {
-					if (rows[i].constructor.name === 'RowDataPacket') { resolve(rows); return; }
-					if (Array.isArray(rows[i]) && rows[i].length && rows[i][0].constructor.name === 'RowDataPacket') { resolve(rows[i]); return; }
-				}
-				// Если объект со строками все же не найден:
-				reject(`No data found for query "${query}" [${values.join(', ')}]`);
-				/* -=-=-=- */
-			});
-		});
-		
-	});
-}
 /**
 	* @description Функция проверки корректности ссылки для сокращения и ее ярлыка.
 	               Для получения имени хоста в punycode используется модуль url.
@@ -140,7 +80,7 @@ function validateInput(address, alias) {
 	let hname = url.parse(address).hostname;
 	if (hname.length < 4 ||
 	    hname.length > 255 ||
-	    hname.toLowerCase().indexOf(HOSTNAME) > -1 ||
+	    hname.toLowerCase().indexOf(config.hostname) > -1 ||
 	    !addressRegexp.test(hname)) {
 		throw new WrongInput('url', 'Некорректная ссылка.');
 	}
@@ -151,9 +91,12 @@ function validateInput(address, alias) {
 	* @param {Object} res - Объект ответа сервера.
 */
 function getEventsList(isNewestFirst, res) {
-	db(`SELECT header, descr, icon, date FROM timeline_events ORDER BY date ${isNewestFirst ? 'DESC' : 'ASC'}`, []).then(
+	database.query(`SELECT header, descr, icon, date FROM timeline_events ORDER BY date ${isNewestFirst ? 'DESC' : 'ASC'}`, []).then(
 		resolve => { res.status(200).send(resolve); },
-		reject  => { res.status(500).send(); log(reject, { type: 'error' }); }
+		reject  => {
+			res.status(500).send();
+			nestor.log(reject, { type: 'error' });
+		}
 	);
 }
 /**
@@ -174,25 +117,35 @@ function shortenURL(query, res) {
 	try {
 		validateInput(address, alias);
 		if (alias.length) {
-			db('CALL sp_addUrlWithUserAlias(?, ?)', [address, alias], true).then(
-				resolve => { res.status(200).send(`http${USE_HTTPS ? 's' : ''}://${HOSTNAME}/${query.alias}`); },
+			database.query('CALL sp_addUrlWithUserAlias(?, ?)', [address, alias], true).then(
+				resolve => {
+					res.location(`http${config.useHttps ? 's' : ''}://${config.hostname}/${query.alias}`);
+					res.status(201).send();
+				},
 				reject  => {
 					if (reject.search(/duplicate\sentry/i) > -1) {
 						res.status(400).send(`Сокращение "${query.alias}" уже занято.`);
 					} else {
 						res.status(400).send('Произошла непредвиденная ошибка.');
-						log(reject, { type: 'error' });
+						nestor.log(reject, { type: 'error' });
 					}
 				}
 			);
 		} else {
-			db('CALL sp_addUrlWithAutoAlias(?)', [address]).then(
-				resolve => { res.status(200).send(`http${USE_HTTPS ? 's' : ''}://${HOSTNAME}/${resolve[0].aliasB36}`); },
-				reject  => { res.status(400).send('Произошла непредвиденная ошибка.'); log(reject, { type: 'error' }); }
+			database.query('CALL sp_addUrlWithAutoAlias(?)', [address]).then(
+				resolve => {
+					res.location(`http${config.useHttps ? 's' : ''}://${config.hostname}/${resolve[0].aliasB36}`);
+					res.status(201).send();
+				},
+				reject  => {
+					res.status(400).send('Произошла непредвиденная ошибка.');
+					nestor.log(reject, { type: 'error' });
+				}
 			);
 		}
 	} catch (error) {
-		res.status(400).send(error.message); log(error.message, { type: 'error' });
+		res.status(400).send(error.message);
+		nestor.log(error.message, { type: 'error' });
 	}
 }
 /**
@@ -208,6 +161,7 @@ function isRequestAllowed(userIP, list) {
 	} else {
 		stopList[list].users.add(userIP);
 		setTimeout( () => { stopList[list].users.delete(userIP); }, stopList[list].timeout );
+		
 		return true;
 	}
 }
@@ -217,90 +171,14 @@ function isRequestAllowed(userIP, list) {
 	* @returns {Object} Объект со значениями-заглушками.
 */
 function createSecret(path) {
-	let secret = { database: 'alolife', login: 'alo_life', password: '123' };
+	let secret = { database: 'alolife', user: 'alo_life', password: '000', cookiesSecret: '000' };
 	
 	fs.appendFileSync(path, JSON.stringify(secret));
-	log('No "secret.json" file found. A new one was just created. You must edit it by specifying correct credentials, then relaunch app.', { type: 'warn' });
-	
-	return true;
-}
-/**
-	* @description Функция переносит содержимое файла в новый файл в указанной директории в случае,
-	*              если размер файла превысил максимально допстимый, затем очищает исходный файл.
-	* @param {Array} files - Массив строк, содержащих абсолютные пути к файлам, которые требуется ротировать.
-	* @param {Number} maxSize - Максимальный размер файла в байтах, по превышению которого файл будет ротирован.
-	* @param {String} destination - Директория, куда будут перемещены файлы. Абсолютный путь.
-*/
-function rotateFiles(files, maxSize, destination) {
-	for (let i = 0; i < files.length; i += 1) {
-		fs.stat(files[i], (error, stats) => {
-			if (error) { throw error; }
-			if (stats.size < maxSize) { return; }
-			
-			fs.readFile(files[i], (error, content) => {
-				if (error) { throw error; }
-				if (!content.length) { return; }
-				
-				let date = new Date().toISOString().replace('T', '_').replace(/:/g, '-').replace(/\.\d+?Z$/, '');
-				const NEW_FILE = path.resolve(destination, `${path.parse(files[i]).name}__${date}.log`);
-				
-				fs.appendFile(NEW_FILE, content, (error) => {
-					if (error) { throw error; }
-					
-					fs.truncate(files[i], 0, (error) => { if (error) { throw error; } });
-				});
-			});
-		});
-	}
-}
-/**
-	* @description Функция получения списка всех файлов с определенным расширением из заданной директории.
-	* @param {String} dir - Где искать. Абсолютный путь.
-	* @param {String} ext - Расширение.
-	* @returns {Array} Массив строк с абсолютными путями.
-*/
-function getFilesByType(dir, ext) {
-	return fs.readdirSync(dir)
-		.filter( (fileName) => fileName.endsWith(ext) )
-		.map( (fileName) => path.resolve(dir, fileName) );
-}
-function logRequest(req, res, next) {
-	next();
-	
-	req._log = {
-		start: process.hrtime(),
-		date:  new Date().toUTCString()
-	};
-	
-	onHeaders(res, () => {
-		res._log = {
-			start: process.hrtime()
-		};
-	});
-	onFinished(res, () => {
-		let date      = req._log.date;
-		let ip        = req.headers['X-Forwarded-For'] || req.headers['x-forwarded-for'] || req.ip;
-		let method    = req.method;
-		let url       = req.originalUrl;
-		let referrer  = req.headers['referer'] || req.headers['referrer'] || 'N/A';
-		let userAgent = req.headers['user-agent'] || 'N/A';
-		let status    = res.statusCode || 'N/A';
-		
-		let start   = req._log.start || [0, 0];
-		let end     = res._log.start || [0, 0];
-		let diff    = (end[0] * 1000 + end[1] / 1e6) - (start[0] * 1000 + start[1] / 1e6); // ms
-		let resTime = `${Math.round(diff * 100) / 100} ms`;
-		
-		let record = `${[date, ip.padEnd(16), status, resTime.padEnd(10), method.padEnd(7), url.padEnd(30), referrer, userAgent].join('  |  ')}\r\n`;
-		
-		const PATH = path.resolve(LOGS_DIR, './access.log');
-		
-		fs.appendFile(PATH, record, (error) => { if (error) { throw error; } });
-	});
+	nestor.log('No "secret.json" file found. A new one was just created. You must edit it by specifying correct credentials, then relaunch app.', { type: 'warn' });
 }
 
 function handleRequest(req, res) {
-	res.sendFile(INDEX_HTML);
+	res.sendFile(paths.index);
 }
 function handleXMLHttpRequest(req, res, next) {
 	let userIP = req.headers['X-Forwarded-For'] || req.headers['x-forwarded-for'] || req.ip;
@@ -316,9 +194,9 @@ function handleXMLHttpRequest(req, res, next) {
 function handleShortenedUrlRequest(req, res, next) {
 	const PATH = decodeURIComponent(req.path.slice(1)).toLowerCase().replace(/\/$/, '');
 	
-	db('CALL sp_getUrl(?)', [PATH]).then(
+	database.query('CALL sp_getUrl(?)', [PATH]).then(
 		resolve => { res.redirect(301, resolve[0].url); },
-		reject  => { next(); log(reject, { type: 'error' }); }
+		reject  => { next(); nestor.log(reject, { type: 'error' }); }
 	);
 }
 
@@ -331,9 +209,25 @@ app.use(helmet.contentSecurityPolicy({
 		styleSrc:   ["'self'", "'unsafe-inline'"]
 	}
 }));
-app.use(express.static(STATIC_DIR, { index: false }));
-app.use(cookieParser());
-app.use(logRequest);
+app.use(express.static(paths.build, { index: false }));
+app.use(nestor.logHttpRequest);
+app.use(expressSession({
+	name: 'express.sid',
+	proxy: config.isProduction,
+	secret: secret.cookiesSecret,
+	store: sessionStore,
+	resave: false,
+	rolling: false,
+	saveUninitialized: false,
+	unset: 'keep',
+	cookie: {
+		domain: config.cookiesDomain,
+		secure: config.useHttps,
+		path: '/',
+		httpOnly: true,
+		maxAge: (14 * 24 * 60 * 60 * 1000)
+	}
+}));
 
 
 // Адрес вида "site.com/xhr". Сюда для удобства направляются все XHR запросы:
@@ -347,12 +241,12 @@ app.get(/^\/(\w|-|%)+(\/?)$/, handleShortenedUrlRequest);
 app.get('*', handleRequest);
 
 
-if (USE_HTTPS) {
+if (config.useHttps) {
 	https.createServer({
-		cert: fs.readFileSync(SSL_CERT),
-		key:  fs.readFileSync(SSL_KEY)
-	}, app).listen(PORT);
+		cert: fs.readFileSync(paths.sslCert),
+		key:  fs.readFileSync(paths.sslKey)
+	}, app).listen(config.port);
 } else {
-	app.listen(PORT);
+	app.listen(config.port);
 }
-log(`HTTP${USE_HTTPS ? 'S' : ''} server started on port ${PORT}.`, { type: 'info' });
+nestor.log(`HTTP${config.useHttps ? 'S' : ''} server started on port ${config.port}.`, { type: 'info' });

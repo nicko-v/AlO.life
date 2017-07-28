@@ -116,14 +116,17 @@ export default class Shortener extends React.Component {
 		event.preventDefault();
 		
 		xhr.addEventListener('readystatechange', () => {
-			if (xhr.readyState != 4) { return; }
+			if (xhr.readyState !== 4) { return; }
 			try {
-				if (xhr.status == 200 && xhr.responseText.length) {
+				let result = xhr.getResponseHeader('Location');
+				
+				if (xhr.status === 201 && result.length) {
 					let urls = this.state.result.slice();
-					urls.push(xhr.responseText);
+					
+					urls.push(result);
 					this.setState({ url: '', alias: '', urlWrongInputs: 0, aliasWrongInputs: 0, error: '', result: urls });
 				} else {
-					throw new Error(xhr.responseText);
+					throw new Error(xhr.responseText || xhr.statusText);
 				}
 			} catch (error) {
 				this.shakeField(error.where);
