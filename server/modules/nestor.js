@@ -17,7 +17,7 @@ class Nestor {
 	}
 	
 	log(message, { type = 'unsorted', date = true, toConsole = true, toFile = true } = {}) {
-		const FILE   = path.resolve(this._logsDir, `./${type}.log`);
+		const file   = path.resolve(this._logsDir, `./${type}.log`);
 		
 		const RED    = '\x1b[31m';
 		const GREEN  = '\x1b[32m';
@@ -27,28 +27,24 @@ class Nestor {
 		const COLOR = (type === 'warn')  ? YELLOW :
 		              (type === 'error') ? RED : '';
 		
-		const MESSAGE = date ? `${new Date().toUTCString()}  |  ${message}` : message;
+		if (date) { message = `${new Date().toUTCString()}  |  ${message}` }
 		
 		
-		if (toConsole) { console.log(`${COLOR}${MESSAGE}${RESET}`); }
-		if (toFile) { fs.appendFile(FILE, `${MESSAGE}\r\n`, (error) => { if (error) { throw error; } }); }
+		if (toConsole) { console.log(`${COLOR}${message}${RESET}`); }
+		if (toFile) { fs.appendFile(file, `${message}\r\n`, (error) => { if (error) { throw error; } }); }
 	}
 	
 	logHttpRequest(req, res, next) {
 		next();
 		
-		req._nestor = {
-			start: process.hrtime(),
-			date:  new Date().toUTCString()
-		};
+		req._nStart = process.hrtime();
+		req._nDate  = new Date().toUTCString()
 		
 		onHeaders(res, () => {
-			res._nestor = {
-				start: process.hrtime()
-			};
+			res._nStart = process.hrtime();
 		});
 		onFinished(res, () => {
-			const date      = req._nestor.date;
+			const date      = req._nDate;
 			const ip        = req.headers['X-Forwarded-For'] || req.headers['x-forwarded-for'] || req.ip;
 			const method    = req.method;
 			const url       = req.originalUrl;
@@ -56,8 +52,8 @@ class Nestor {
 			const userAgent = req.headers['user-agent'] || 'N/A';
 			const status    = res.statusCode || 'N/A';
 			
-			const start   = req._nestor.start || [0, 0];
-			const end     = res._nestor.start || [0, 0];
+			const start   = req._nStart || [0, 0];
+			const end     = res._nStart || [0, 0];
 			const diff    = (end[0] * 1000 + end[1] / 1e6) - (start[0] * 1000 + start[1] / 1e6); // ms
 			const resTime = `${Math.round(diff * 100) / 100} ms`;
 			

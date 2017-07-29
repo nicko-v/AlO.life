@@ -7,12 +7,13 @@ const fs             = require('fs');
 const helmet         = require('helmet');
 const https          = require('https');
 const multer         = require('multer');
-const path           = require('path');
 const url            = require('url');
 const config         = require('./config/config.js');
 const DataBase       = require('./modules/database.js');
 const Nestor         = require('./modules/nestor.js');
 const paths          = require('./config/paths.js');
+
+const nestor = new Nestor(paths.logs, paths.logsOld);
 
 
 // Проверка и создание при необходимости ресурсов, исключенных из git:
@@ -26,7 +27,6 @@ const stopList     = {
 const app          = express();
 const upload       = multer();
 const MySqlStore   = ems(expressSession);
-const nestor       = new Nestor(paths.logs, paths.logsOld);
 const database     = new DataBase({
 	connectionLimit: 100,
 	host: 'localhost',
@@ -192,9 +192,9 @@ function handleXMLHttpRequest(req, res, next) {
 	}
 }
 function handleShortenedUrlRequest(req, res, next) {
-	const PATH = decodeURIComponent(req.path.slice(1)).toLowerCase().replace(/\/$/, '');
+	const path = decodeURIComponent(req.path.slice(1)).toLowerCase().replace(/\/$/, '');
 	
-	database.query('CALL sp_getUrl(?)', [PATH]).then(
+	database.query('CALL sp_getUrl(?)', [path]).then(
 		resolve => { res.redirect(301, resolve[0].url); },
 		reject  => { next(); nestor.log(reject, { type: 'error' }); }
 	);
