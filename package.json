@@ -30,12 +30,12 @@
   },
   "homepage": "https://github.com/nicko-v/AlO.life#readme",
   "dependencies": {
+    "body-parser": "^1.17.2",
     "cross-env": "^5.0.1",
     "express": "^4.15.3",
     "express-mysql-session": "^1.2.1",
     "express-session": "^1.15.4",
     "helmet": "^3.8.0",
-    "multer": "^1.3.0",
     "mysql": "^2.14.0",
     "on-finished": "^2.3.0",
     "on-headers": "^1.0.1"

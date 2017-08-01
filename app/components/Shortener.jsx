@@ -137,14 +137,11 @@ export default class Shortener extends React.Component {
 		try {
 			validateInput(this.state.url, this.state.alias);
 			
-			let data = new FormData();
+			const data = JSON.stringify({ url: this.state.url, alias: this.state.alias });
 			
-			data.append('q', 'shorten_url');
-			data.append('url', this.state.url);
-			data.append('alias', this.state.alias);
-			
-			xhr.open('POST', '/xhr');
+			xhr.open('POST', '/x/shorten-url');
 			xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+			xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 			xhr.send(data);
 		} catch (error) {
 			this.shakeField(error.where);

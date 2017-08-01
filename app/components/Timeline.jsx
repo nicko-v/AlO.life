@@ -77,7 +77,7 @@ export default class Timeline extends React.Component {
 			}
 		});
 
-		xhr.open('GET', `/xhr?q=events_list&newest=${+this.state.newestFirst}`);
+		xhr.open('GET', `/x/events-list?newestFirst=${+this.state.newestFirst}`);
 		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 		xhr.send();
 	}

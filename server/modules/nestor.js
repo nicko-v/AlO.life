@@ -30,7 +30,7 @@ class Nestor {
 		if (date) { message = `${new Date().toUTCString()}  |  ${message}` }
 		
 		
-		if (toConsole) { console.log(`${COLOR}${message}${RESET}`); }
+		if (toConsole) { console.log(`${RESET}${COLOR}${message}${RESET}`); }
 		if (toFile) { fs.appendFile(file, `${message}\r\n`, (error) => { if (error) { throw error; } }); }
 	}
 	
@@ -45,7 +45,7 @@ class Nestor {
 		});
 		onFinished(res, () => {
 			const date      = req._nDate;
-			const ip        = req.headers['X-Forwarded-For'] || req.headers['x-forwarded-for'] || req.ip;
+			const ip        = req.realIp;
 			const method    = req.method;
 			const url       = req.originalUrl;
 			const referrer  = req.headers['referer'] || req.headers['referrer'] || 'N/A';
