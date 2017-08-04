@@ -71,19 +71,17 @@ class Nestor {
 		if (time) {
 			
 			setInterval(() => {
-				this._getFilesByType(this._logsDir, '.log').then(
-					(files) => {
+				this._getFilesByType(this._logsDir, '.log')
+					.then(files => {
 						
 						for (let i = 0; i < files.length; i += 1) {
-							this._isSizeLimitReached(files[i], size).then(
-								(file) => { this._rotate(file); },
-								(reject) => {}
-							);
+							this._isSizeLimitReached(files[i], size)
+								.then(file => this._rotate(file))
+								.catch(error => {});
 						}
 						
-					},
-					(error) => { this.log(error, { type: 'error' }); }
-				);
+					})
+					.catch(error => this.log(error, { type: 'error' }));
 			}, time);
 			
 		} else {
@@ -126,19 +124,41 @@ class Nestor {
 }
 	
 	_rotate(file) {
-		fs.readFile(file, (error, content) => {
-			if (error) { throw error; }
-			if (!content.length) { return; }
-			
-			const date = new Date().toISOString().replace('T', '_').replace(/:/g, '-').replace(/\.\d+?Z$/, '');
-			const newFile = path.resolve(this._oldLogsDir, `${path.parse(file).name}__${date}.log`);
-			
-			fs.appendFile(newFile, content, (error) => {
-				if (error) { throw error; }
+		const date = new Date().toISOString().replace('T', '_').replace(/:/g, '-').replace(/\.\d+?Z$/, '');
+		const newFile = path.resolve(this._oldLogsDir, `${path.parse(file).name}__${date}.log`);
+		
+		function readFile(file) {
+			return new Promise((resolve, reject) => {
 				
-				fs.truncate(file, 0, (error) => { if (error) { throw error; } });
+				fs.readFile(file, (error, content) => {
+					error ? reject(error) : resolve(content);
+				});
+				
 			});
-		});
+		}
+		function appendFile(file, content) {
+			return new Promise((resolve, reject) => {
+				
+				fs.appendFile(file, content, (error) => {
+					error ? reject(error) : resolve();
+				});
+				
+			});
+		}
+		function truncateFile(file) {
+			return new Promise((resolve, reject) => {
+				
+				fs.truncate(file, 0, (error) => {
+					error ? reject(error) : resolve();
+				});
+				
+			});
+		}
+		
+		readFile(file)
+			.then(content => appendFile(newFile, content))
+			.then(resolve => truncateFile(file))
+			.catch(error  => this.log(error, { type: 'error' }));
 	}
 }
 

@@ -5,6 +5,6 @@
 		"cwd"       : "./",
 		"watch"     : true,
 		"merge_logs": true,
-		"env"       : { "NODE_ENV": "prod" }
+		"env"       : { "NODE_ENV": "production" }
 	}]
 }
