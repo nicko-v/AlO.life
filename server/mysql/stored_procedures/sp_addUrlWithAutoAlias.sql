@@ -22,7 +22,7 @@ BEGIN
         EXECUTE statement1 USING @a, @b;
         DEALLOCATE PREPARE statement1;
 
-        SELECT aliasB36;
+        SELECT aliasB36 AS alias;
 
 END ;;
 DELIMITER ;

@@ -7,6 +7,8 @@ BEGIN
         SET @b = alias;
         EXECUTE statement1 USING @a, @b;
         DEALLOCATE PREPARE statement1;
+				
+				SELECT alias;
 
 END ;;
 DELIMITER ;

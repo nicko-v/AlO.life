@@ -4,6 +4,7 @@ const fs         = require('fs');
 const path       = require('path');
 const onFinished = require('on-finished');
 const onHeaders  = require('on-headers');
+const paths      = require('../config/paths.js');
 
 
 class Nestor {
@@ -24,8 +25,8 @@ class Nestor {
 		const YELLOW = '\x1b[33m';
 		const RESET  = '\x1b[0m\x1b[0m';
 		
-		const COLOR = (type === 'warn')  ? YELLOW :
-		              (type === 'error') ? RED : '';
+		const COLOR = (type.startsWith('warn'))  ? YELLOW :
+		              (type.startsWith('error')) ? RED : '';
 		
 		if (date) { message = `${new Date().toUTCString()}  |  ${message}` }
 		
@@ -45,9 +46,9 @@ class Nestor {
 		});
 		onFinished(res, () => {
 			const date      = req._nDate;
-			const ip        = req.realIp;
-			const method    = req.method;
-			const url       = req.originalUrl;
+			const ip        = req.realIp || '';
+			const method    = req.method || '';
+			const url       = req.originalUrl || '';
 			const referrer  = req.headers['referer'] || req.headers['referrer'] || 'N/A';
 			const userAgent = req.headers['user-agent'] || 'N/A';
 			const status    = res.statusCode || 'N/A';
@@ -130,7 +131,7 @@ class Nestor {
 		function readFile(file) {
 			return new Promise((resolve, reject) => {
 				
-				fs.readFile(file, (error, content) => {
+				fs.readFile(file, 'utf8', (error, content) => {
 					error ? reject(error) : resolve(content);
 				});
 				
@@ -163,4 +164,4 @@ class Nestor {
 }
 
 
-module.exports = Nestor;
+module.exports = new Nestor(paths.logs, paths.logsOld);

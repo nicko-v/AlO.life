@@ -2,12 +2,12 @@
   "name": "alo-life",
   "version": "0.1.0",
   "description": "Blog and useful apps for Altiros Online.",
-  "main": "index.jsx",
+  "main": "./server/index.js",
   "scripts": {
     "build": "webpack --hide-modules",
     "build-p": "webpack -p",
-    "start": "cross-env NODE_ENV=development node ./server/server.js",
-    "start-p": "cross-env NODE_ENV=production node ./server/server.js",
+    "start": "cross-env NODE_ENV=development node ./server/index.js",
+    "start-p": "cross-env NODE_ENV=production node ./server/index.js",
     "dev-server": "webpack-dev-server"
   },
   "babel": {
@@ -35,14 +35,18 @@
     "express": "^4.15.3",
     "express-mysql-session": "^1.2.1",
     "express-session": "^1.15.4",
+    "intl": "^1.2.5",
+    "intl-locales-supported": "^1.0.0",
     "mysql": "^2.14.0",
     "on-finished": "^2.3.0",
-    "on-headers": "^1.0.1"
+    "on-headers": "^1.0.1",
+    "request": "^2.81.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.7",
     "babel-core": "^6.24.1",
     "babel-loader": "^7.1.1",
+    "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "copy-webpack-plugin": "^4.0.1",

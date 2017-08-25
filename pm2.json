@@ -1,7 +1,7 @@
 {
 	"apps": [{
 		"name"      : "alo_life",
-		"script"    : "server/server.js",
+		"script"    : "server/index.js",
 		"cwd"       : "./",
 		"watch"     : true,
 		"merge_logs": true,

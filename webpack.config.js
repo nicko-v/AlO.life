@@ -4,9 +4,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 module.exports = {
-	context: path.resolve(__dirname, 'app'), // absolute path. the entry and module.rules.loader option is resolved relative to this directory
+	context: path.resolve(__dirname, 'app/src'), // absolute path. the entry and module.rules.loader option is resolved relative to this directory
 	
-	entry: './index.jsx', // Here the application starts executing and webpack starts bundling
+	entry: ['babel-polyfill', './index.jsx'], // Here the application starts executing and webpack starts bundling
 	
 	output: { // options related to how webpack emits results
 		path: path.resolve(__dirname, 'app/build'), // the target directory for all output files must be an absolute path (use the Node.js path module)
@@ -27,7 +27,7 @@ module.exports = {
 			
 			{
 				test: /\.css$/,
-				exclude: [ path.resolve(__dirname, 'app/css/dark-mode.css') ],
+				exclude: [ path.resolve(__dirname, 'app/src/css/dark-mode.css') ],
 				use: [ // apply multiple loaders and options
 					{
 						loader: 'style-loader',
@@ -63,13 +63,13 @@ module.exports = {
 	
 	plugins: [ // list of additional plugins
 		new HTMLWebpackPlugin({
-			template: path.resolve(__dirname, 'app/index.html'),
+			template: path.resolve(__dirname, 'app/src/index.html'),
 			filename: 'index.html',
 			inject: 'body'
 		}),
 		new CopyWebpackPlugin([
 			{
-				from: path.resolve(__dirname, 'app/static'),
+				from: path.resolve(__dirname, 'app/src/static'),
 				to: path.resolve(__dirname, 'app/build/static')
 			}
 		])
