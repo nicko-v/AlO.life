@@ -1,15 +1,19 @@
 const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const extractRegularStyles = new ExtractTextPlugin('styles.css');
+const extractDarkStyles    = new ExtractTextPlugin('styles.dark.css');
+
 
 module.exports = {
-	context: path.resolve(__dirname, 'app/src'), // absolute path. the entry and module.rules.loader option is resolved relative to this directory
+	context: path.resolve(__dirname, 'client/src'), // absolute path. the entry and module.rules.loader option is resolved relative to this directory
 	
 	entry: ['babel-polyfill', './index.jsx'], // Here the application starts executing and webpack starts bundling
 	
 	output: { // options related to how webpack emits results
-		path: path.resolve(__dirname, 'app/build'), // the target directory for all output files must be an absolute path (use the Node.js path module)
+		path: path.resolve(__dirname, 'client/build'), // the target directory for all output files must be an absolute path (use the Node.js path module)
 		filename: 'app.js', // the filename template for entry chunks
 		publicPath: '/', // the url to the output directory resolved relative to the HTML page
   },
@@ -27,56 +31,35 @@ module.exports = {
 			
 			{
 				test: /\.css$/,
-				exclude: [ path.resolve(__dirname, 'app/src/css/dark-mode.css') ],
-				use: [ // apply multiple loaders and options
-					{
-						loader: 'style-loader',
-						options: { singleton: true }
-					},
-					{
-						loader: 'css-loader',
-						options: {
-							url: false,
-							importLoaders: 1
-						}
-					},
-					{ loader: 'postcss-loader' }
-				]
+				exclude: /\.dark\.css$/,
+				use: extractRegularStyles.extract(['css-loader', 'postcss-loader'])
 			},
 			
 			{
-				test: /dark-mode\.css$/,
-				use: [ // apply multiple loaders and options
-					{ loader: 'style-loader' },
-					{
-						loader: 'css-loader',
-						options: {
-							url: false,
-							importLoaders: 1
-						}
-					},
-					{ loader: 'postcss-loader' }
-				]
-			}
+				test: /\.dark\.css$/,
+				use: extractDarkStyles.extract(['css-loader', 'postcss-loader'])
+			},
 		]
 	},
 	
 	plugins: [ // list of additional plugins
 		new HTMLWebpackPlugin({
-			template: path.resolve(__dirname, 'app/src/index.html'),
+			template: path.resolve(__dirname, 'client/src/index.html'),
 			filename: 'index.html',
 			inject: 'body'
 		}),
 		new CopyWebpackPlugin([
 			{
-				from: path.resolve(__dirname, 'app/src/static'),
-				to: path.resolve(__dirname, 'app/build/static')
+				from: path.resolve(__dirname, 'client/src/static'),
+				to: path.resolve(__dirname, 'client/build/static')
 			}
-		])
+		]),
+		extractRegularStyles,
+		extractDarkStyles
 	],
 	
 	devServer: {
-		contentBase: path.resolve(__dirname, 'app/build'), // static file location
+		contentBase: path.resolve(__dirname, 'client/build'), // static file location
 		compress: true, // enable gzip compression
 		https: false, // true for self-signed, object for cert authority
 		noInfo: true, // only errors & warns on hot reload

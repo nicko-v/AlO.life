@@ -1,0 +1,12 @@
+.button_cog {
+	height: 100%;
+	cursor: pointer;
+	transition: transform 500ms ease-out;
+	transform-origin: center;
+	margin-left: 10px;
+	background-color: rgba(0, 0, 0, 0);
+	padding: 0;
+}
+.button_cog:active {
+	color: #555;
+}

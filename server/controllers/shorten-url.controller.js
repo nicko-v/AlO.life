@@ -4,9 +4,9 @@ const Ban            = require('../modules/ban.js');
 const config         = require('../config/config.js');
 const model          = require('../models/shorten-url.model.js');
 const nestor         = require('../modules/nestor.js');
-const ShortenerError = require('../../utils/shortenerError.js');
-const validateAlias  = require('../../utils/validate-alias.js');
-const validateUrl    = require('../../utils/validate-url.js');
+const ShortenerError = require('../utils/shortenerError.js');
+const validateAlias  = require('../utils/validate-alias.js');
+const validateUrl    = require('../utils/validate-url.js');
 
 const ban = new Ban(5000);
 

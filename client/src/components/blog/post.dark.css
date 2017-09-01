@@ -1,0 +1,12 @@
+.blog-post-header {
+	border-bottom: 1px solid #555;
+}
+.blog-post-header-title {
+	color: #aaa;
+}
+.blog-post-header-time {
+	color: #444;
+}
+.blog-post-manage > li {
+	color: #777;
+}

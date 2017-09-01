@@ -1,0 +1,123 @@
+@import "fonts.css";
+@import "animations.css";
+@import "fontello.css";
+@import "animate.css";
+
+*::selection {
+	background-color: #aaa;
+}
+::-webkit-scrollbar {
+	width: 6px;
+}
+::-webkit-scrollbar-thumb {
+	background-color: #777;
+}
+
+html {
+	font-size: 16px;
+	font-family: 'Clear Sans', sans-serif;
+}
+html, body {
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+}
+p, ul, li, html, body, input {
+	margin: 0;
+	padding: 0;
+}
+img, svg {
+	vertical-align: bottom; /* Удаляет отступ под изображением */
+}
+a {
+	color: #bb832d;
+	text-decoration: none;
+	position: relative;
+}
+a::before {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 0;
+	height: 1px;
+	background-color: #bb832d;
+	transition: width 300ms ease-in 10ms;
+}
+a:hover::before {
+	width: 100%;
+}
+button {
+	border: none;
+	color: inherit;
+	font-size: inherit;
+}
+button:active, button:focus {
+	outline: none;
+}
+
+.aNoAnim {
+	transition: none;
+}
+.aNoAnim:hover, .aNoAnim:visited {
+	color: inherit;
+}
+.aNoAnim::before {
+	height: 0;
+	background-color: transparent;
+	transition: none;
+}
+.aNoAnim:hover::before {
+	width: 0;
+	background-color: transparent;
+}
+.noselect {
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+	cursor: default;
+}
+.pusher {
+	flex-grow: 1;
+}
+
+#root, #app {
+	display: flex;
+	width: 100%;
+	min-height: 100%;
+	position: relative;
+}
+
+.content {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-left: 270px; /* Связано с width у nav */
+	width: calc(100% - 270px); /* Связано с width у nav */
+}
+main { /* Общие свойства для всех подключаемых блоков, остальные в соответствующих файлах */
+	flex-grow: 1; /* Прижимает футер книзу */
+	opacity: 0;
+	animation: fade-in 300ms ease-in forwards;
+	color: #777; /* Основной цвет текста */
+}
+
+@media (max-width: 900px) {
+	.content {
+		width: 100%;
+		margin-left: 0;
+		padding-top: 40px;
+	}
+}
+
+@media (max-width: 900px) {
+	html {
+		min-width: 320px;
+	}
+	#app {
+		flex-direction: column;
+		align-items: center;
+	}
+}
