@@ -57,7 +57,7 @@ const sessionOptions = {
 
 
 function createSecret(path) {
-	const secret = { database: 'alolife', user: 'alo_life', password: '000', cookiesSecret: '000', vkClientSecret: '000', vkAppId: '000' };
+	const secret = { db_name: 'alolife', db_user: 'alo_life', db_pass: '000', cookiesSecret: '000', vkClientSecret: '000', vkAppId: '000' };
 	
 	fs.appendFileSync(path, JSON.stringify(secret, '', 2));
 	nestor.log('No "secret.json" file found. A new one was just created. You must edit it by specifying correct credentials, then relaunch app.', { type: 'warn' });
