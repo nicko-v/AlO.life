@@ -96,7 +96,7 @@ const model = {
 		});
 	},
 	
-	addOrUpdateUser({ id, first_name: name, email, sex, photo_max: avatar }, userExists) {
+	addOrUpdateUser({ id, first_name: nickname, email, sex, photo_max: avatar }, userExists) {
 		return new Promise((resolve, reject) => {
 			
 			pool.getConnection((error, connection) => {
