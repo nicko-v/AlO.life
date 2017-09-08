@@ -8,7 +8,10 @@ const model = {
 		return new Promise((resolve, reject) => {
 			
 			pool.getConnection((error, connection) => {
-				if (error) { throw error; }
+				if (error) {
+					reject(error);
+					return;
+				}
 				
 				connection.query(alias ? 'CALL sp_addUrlWithUserAlias(?, ?)' : 'CALL sp_addUrlWithAutoAlias(?)', [url, alias], (error, rows) => {
 					connection.release();

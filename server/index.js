@@ -15,11 +15,13 @@ const localesMyAppSupports = ['ru'];
 if (global.Intl) {
 	if (!areIntlLocalesSupported(localesMyAppSupports)) {
 		const IntlPolyfill  = require('intl');
+		IntlPolyfill.__disableRegExpRestore();
 		Intl.NumberFormat   = IntlPolyfill.NumberFormat;
 		Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
 	}
 } else {
     global.Intl = require('intl');
+		global.Intl.__disableRegExpRestore();
 }
 
 

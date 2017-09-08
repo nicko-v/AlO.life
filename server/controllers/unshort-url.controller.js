@@ -11,7 +11,7 @@ function unshortUrl(req, res, next) {
 		.then(url => res.redirect(301, url))
 		.catch(error => {
 			next();
-			nestor.log(error, { type: 'shortener-notfound' });
+			nestor.log(error, { type: 'shortener-notfound', toConsole: false });
 		});
 }
 

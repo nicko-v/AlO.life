@@ -11,9 +11,9 @@ const pool = mysql.createPool({
 	connectionLimit: 100,
 	host: 'localhost',
 	port: 3306,
-	database: secret.database,
-	user:     secret.user,
-	password: secret.password
+	database: secret.db_name,
+	user:     secret.db_user,
+	password: secret.db_pass
 });
 
 

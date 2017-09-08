@@ -12,11 +12,13 @@ export default class TimelineContainer extends React.Component {
 		this.state = {
 			newestFirst: storedNewestFirst === null ? true : storedNewestFirst,
 			events: [],
-			years: {}
+			years: {},
+			filterByPhrase: ''
 		};
 		
-		this.toggleTimeline = this.toggleTimeline.bind(this);
-		this.toggleYear     = this.toggleYear.bind(this);
+		this.toggleTimeline     = this.toggleTimeline.bind(this);
+		this.toggleYear         = this.toggleYear.bind(this);
+		this.handleSearchChange = this.handleSearchChange.bind(this);
 	}
 	
 	toggleTimeline() {
@@ -39,6 +41,17 @@ export default class TimelineContainer extends React.Component {
 		window.sessionStorage.setItem('timeline-show-by-year', JSON.stringify(years));
 	}
 	
+	handleSearchChange(event) {
+		this.setState({ filterByPhrase: event.target.value });
+	}
+	
+	filterEvents(events) {
+		const escapedInput = this.state.filterByPhrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		const regexp       = new RegExp(escapedInput, 'i');
+		
+		return events.filter(event => this.state.years[event.date.year] && (event.name.match(regexp) || event.descr.match(regexp)));
+	}
+	
 	componentDidMount() {
 		const storedYears = JSON.parse(window.sessionStorage.getItem('timeline-show-by-year')) || {};
 		
@@ -55,16 +68,17 @@ export default class TimelineContainer extends React.Component {
 					}
 				});
 			})
-			.catch(error => console.log(error));
+			.catch(error => console.error(error));
 	}
 	
 	render() {
 		const props = {
-			years:          this.state.years,
-			toggleYear:     this.toggleYear,
-			isActive:       this.state.newestFirst,
-			toggleTimeline: this.toggleTimeline,
-			events:         this.state.events.filter(event => this.state.years[event.date.year]),
+			years:              this.state.years,
+			toggleYear:         this.toggleYear,
+			handleSearchChange: this.handleSearchChange,
+			isActive:           this.state.newestFirst,
+			toggleTimeline:     this.toggleTimeline,
+			events:             this.filterEvents(this.state.events),
 		};
 		
 		return <Timeline {...props} />;

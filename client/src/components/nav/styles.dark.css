@@ -1,5 +1,5 @@
 nav {
-	border-right: 1px solid #555;
+	border-right: 1px solid #333;
 	background-color: #444;
 }
 .nav-cape {
@@ -8,8 +8,14 @@ nav {
 .nav-sitename {
 	border-bottom: 1px solid #555;
 }
-.nav-services > li:hover {
+.nav-services > li:hover > a {
+	background-color: #666;
+}
+.nav-services > li:active > a {
 	background-color: #555;
+}
+.nav-services-service_current {
+	background-color: #333;
 }
 
 @media (max-width: 900px) {

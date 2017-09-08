@@ -8,7 +8,10 @@ const model = {
 		return new Promise((resolve, reject) => {
 			
 			pool.getConnection((error, connection) => {
-				if (error) { throw error; }
+				if (error) {
+					reject(error);
+					return;
+				}
 				
 				connection.query(`SELECT * FROM timeline_events ORDER BY date ${order}`, (error, rows) => {
 					connection.release();
@@ -17,7 +20,6 @@ const model = {
 						return;
 					} else {
 						const result = rows.map(event => {
-							const eventDate = new Date(event.date);
 							const formatter = new Intl.DateTimeFormat('ru', { day: 'numeric', month: 'long' });
 							
 							return {
@@ -26,10 +28,10 @@ const model = {
 								descr: event.descr || '',
 								icon:  event.icon || 'info',
 								date: {
-									year:  eventDate.getFullYear(),
-									month: eventDate.getMonth() + 1,
-									day:   eventDate.getDate(),
-									dayOfMonth: formatter.format(eventDate)
+									year:  event.date.getFullYear(),
+									month: event.date.getMonth() + 1,
+									day:   event.date.getDate(),
+									dayOfMonth: formatter.format(event.date)
 								}
 							};
 						});

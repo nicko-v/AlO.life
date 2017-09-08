@@ -5,7 +5,7 @@ const nestor = require('../modules/nestor.js');
 
 
 function eventsList(req, res, next) {
-	if (!req.xhr || !req.query) {
+	if (!req.xhr || !Object.keys(req.query).length) {
 		next();
 		return;
 	}

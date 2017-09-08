@@ -1,5 +1,5 @@
 *.DS_Store
-app/build/
+client/build/
 node_modules/
 out/
 server/config/secret.json

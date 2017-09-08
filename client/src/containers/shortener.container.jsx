@@ -73,23 +73,23 @@ export default class ShortenerContainer extends React.Component {
 		clearTimeout(this.state[`${field}AnimationTimeout`]);
 		this.setState({
 			[`${field}WrongInputs`]: this.state[`${field}WrongInputs`] += 1,
-			[`${field}InputAnimation`]: `animated ${this.state[`${field}WrongInputs`] >= 10 ? 'tada' : 'shake'}`,
+			[`${field}InputAnimation`]: `animated ${this.state[`${field}WrongInputs`] > 10 ? 'tada' : 'shake'}`,
 			[`${field}AnimationTimeout`]: setTimeout( () => this.setState({ [`${field}InputAnimation`]: '' }), 1000 )
 		});
 	}
 	
 	render() {
-		const props = { // Надо переделать.
-			url: this.state.url,
-			alias: this.state.alias,
-			error: this.state.error,
+		const props = {
+			url:    this.state.url,
+			alias:  this.state.alias,
+			error:  this.state.error,
 			result: this.state.result,
-			isSpoilerExpanded: this.state.isSpoilerExpanded,
-			urlInputAnimation: this.state.urlInputAnimation,
+			isSpoilerExpanded:   this.state.isSpoilerExpanded,
+			urlInputAnimation:   this.state.urlInputAnimation,
 			aliasInputAnimation: this.state.aliasInputAnimation,
-			handleInputChange: this.handleInputChange,
-			handleFormSubmit: this.handleFormSubmit,
-			toggleSpoiler: this.toggleSpoiler,
+			handleInputChange:   this.handleInputChange,
+			handleFormSubmit:    this.handleFormSubmit,
+			toggleSpoiler:       this.toggleSpoiler,
 		};
 		
 		return <Shortener {...props} />;

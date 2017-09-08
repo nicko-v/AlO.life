@@ -63,17 +63,6 @@ nav {
 	text-transform: uppercase;
 	flex-grow: 1;
 }
-.nav-services > li {
-	height: 50px;
-	transition: background-color .2s ease-out 0s;
-	box-sizing: border-box;
-}
-.nav-services > li:hover {
-	background-color: #d0d0d0;
-}
-.nav-services > li:active {
-	background-color: #b9b9b9;
-}
 .nav-services a {
 	display: flex;
 	justify-content: center;
@@ -84,29 +73,37 @@ nav {
 .nav-services a:hover {
 	text-decoration: none;
 }
-.nav-links {
+.nav-services > li {
+	height: 50px;
+	transition: background-color .2s ease-out 0s;
+	box-sizing: border-box;
+}
+.nav-services > li:hover > a {
+	background-color: #d0d0d0;
+}
+.nav-services > li:active > a {
+	background-color: #b9b9b9;
+}
+.nav-services-service_current {
+	background-color: #ddd;
+}
+.nav-account_controls {
 	margin: 30px 0;
-	list-style: none;
+	display: flex;
+	justify-content: center;
 }
-.nav-links > li {
-	display: inline;
-	margin-left: 25px;
-}
-.nav-links > li:first-child {
-	margin-left: 0;
+.nav-account_controls > a:first-child {
+	margin-right: 25px;
 }
 nav a {
 	color: inherit;
 }
 
-.nav-mobile_selectService {
+.nav-mobile_dropdown {
 	display: none;
 }
 
 @media (max-width: 900px) {
-	.nav-separator, .nav-sitename, #nav-links-separator {
-		display: none;
-	}
 	nav {
 		position: relative;
 		top: 0;
@@ -120,7 +117,10 @@ nav a {
 		font-size: 14px;
 		border-bottom: 1px solid #ccc;
 	}
-	.nav-mobile_selectService {
+	.nav-separator, .nav-sitename {
+		display: none;
+	}
+	.nav-mobile_dropdown {
 		display: block;
 		width: calc(50% - 50px);
 		height: 100%;
@@ -144,8 +144,8 @@ nav a {
 		border-bottom-right-radius: 20px;
 		border: 1px solid #ccc;
 		border-top: none;
-		margin-top: -1px; /* Скрывает border-bottom у navbar в месте наложения */
-		padding-top: 1px; /* Скрывает border-bottom у navbar в месте наложения */
+		margin-top: -1px; /* Скрывает border-bottom у nav в месте наложения */
+		padding-top: 1px; /* Скрывает border-bottom у nav в месте наложения */
 	}
 	.nav-services_collapsed {
 		display: none;
@@ -153,12 +153,15 @@ nav a {
 	.nav-services_expanded {
 		display: block;
 	}
-	.nav-services > li {
-		padding: 0 10px;
+	.nav-services > li:last-child {
+		border-radius: inherit;
 	}
-	.nav-services > li:last-child:hover {
-		border-bottom-left-radius: 20px;
-		border-bottom-right-radius: 20px;
+	.nav-services > li > a {
+		padding: 0 10px;
+		box-sizing: border-box;
+	}
+	.nav-services > li:last-child > a {
+		border-radius: inherit;
 	}
 	.nav-cape {
 		min-height: 100px; /* Высота svg */
@@ -173,27 +176,23 @@ nav a {
 		width: 100px;
 		height: 100px;
 	}
-	.nav-links {
-		padding: 0 20px;
+	.nav-account_controls {
+		padding: 10px 20px;
 		margin: 0;
-		display: flex;
 		justify-content: flex-end;
+		align-items: center;
 		width: calc(50% - 50px);
+		height: 100%;
 		box-sizing: border-box;
 	}
 }
 @media (max-width: 400px) {
-	.nav-links {
+	.nav-account_controls {
 		flex-direction: column;
-		justify-content: center;
+		justify-content: space-around;
 		align-items: center;
 	}
-	.nav-links > li {
-		display: block;
-		margin-left: 0;
-		margin-bottom: 10px;
-	}
-	.nav-links > li:last-child {
-		margin-bottom: 0;
+	.nav-account_controls > a:first-child {
+		margin-right: 0;
 	}
 }

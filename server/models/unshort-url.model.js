@@ -8,11 +8,15 @@ const model = {
 		return new Promise((resolve, reject) => {
 			
 			pool.getConnection((error, connection) => {
-				if (error) { throw error; }
+				if (error) {
+					reject(error);
+					return;
+				}
 				
 				connection.query('CALL sp_getUrl(?)', [alias], (error, rows) => {
 					connection.release();
-					error ? reject(error) : resolve(rows[0][0].url);
+					error ? reject(error) :
+						rows[0].length ? resolve(rows[0][0].url) : reject(new Error(`Alias ${alias} doesn't exist`));
 				});
 			});
 			

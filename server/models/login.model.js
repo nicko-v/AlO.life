@@ -96,7 +96,7 @@ const model = {
 		});
 	},
 	
-	addUser(userData) {
+	addOrUpdateUser({ id, first_name: name, email, sex, photo_max: avatar }, userExists) {
 		return new Promise((resolve, reject) => {
 			
 			pool.getConnection((error, connection) => {
@@ -105,11 +105,11 @@ const model = {
 					return;
 				}
 				
-				const data = [userData.id, userData.email, userData.first_name, userData.last_name, userData.sex, userData.bdate, userData.country, userData.city, userData.photo_max];
+				const action = userExists ? 'updateUser' : 'addUser';
 				
-				connection.query('CALL sp_addUser(?, ?, ?, ?, ?, ?, ?, ?, ?)', data, (error, rows) => {
+				connection.query(`CALL sp_${action}(?, ?, ?, ?, ?)`, [id, nickname, email, sex, avatar], (error, rows) => {
 					connection.release();
-					error ? reject(error) : resolve(userData.id);
+					error ? reject(error) : resolve(id);
 				});
 			});
 			

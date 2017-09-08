@@ -11,11 +11,9 @@ const validateUrl    = require('../utils/validate-url.js');
 const ban = new Ban(5000);
 
 
-function shortenUrl(req, res, next) {
-	if (!req.xhr || !req.body) {
-		next();
-		return;
-	}
+function shortenUrl(req, res) {
+	if (!req.xhr) { return; }
+	
 	if (ban.isBanned(req.realIp)) {
 		res.status(503).json(new ShortenerError('', 'Превышен лимит количества запросов. Пожалуйста, попробуйте позже.'));
 		return;

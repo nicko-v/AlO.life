@@ -14,15 +14,14 @@ function validateUrl(address = '', minLength = 10, maxLength = 2000, side = 'ser
 	// содержит имя хоста без протокола, порта и пути, кодированное в punycode, что упрощает проверку:
 	if (side === 'server') {
 		
-		var config = require('../config/config.js');
-		var url    = require('url');
+		var localhost = require('../config/config.js').hostname;
+		var url       = require('url');
 		var hname     = url.parse(address).hostname;
-		var localhost = config.hostname;
 		
 	} else if (side === 'client') {
 		
 		var a = document.createElement('a');
-		a.href  = address;
+		a.href = address;
 		var hname     = a.hostname;
 		var localhost = window.location.hostname;
 		
@@ -31,7 +30,7 @@ function validateUrl(address = '', minLength = 10, maxLength = 2000, side = 'ser
 	
 	if (hname.length < 4 ||
 	    hname.length > 255 ||
-	    hname.toLowerCase().indexOf(localhost) > -1 ||
+	    hname.toLowerCase().includes(localhost) ||
 	    !regexp.test(hname)) {
 		throw new ShortenerError('url', 'Некорректная ссылка.');
 	}
