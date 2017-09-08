@@ -1,8 +1,8 @@
-import React         from 'react';
-import Shortener     from '../components/shortener/index.jsx';
-import shortenUrl    from '../api/shorten-url.js';
-import validateAlias from '../../../server/utils/validate-alias';
-import validateUrl   from '../../../server/utils/validate-url';
+import React          from 'react';
+import Shortener      from '../components/shortener/index.jsx';
+import api_shortenUrl from '../api/shorten-url.js';
+import validateAlias  from '../../../server/utils/validate-alias';
+import validateUrl    from '../../../server/utils/validate-url';
 
 
 export default class ShortenerContainer extends React.Component {
@@ -54,7 +54,7 @@ export default class ShortenerContainer extends React.Component {
 			return;
 		}
 		
-		shortenUrl(url, this.state.alias)
+		api_shortenUrl(url, this.state.alias)
 			.then(alias => {
 				const result = [...this.state.result];
 				

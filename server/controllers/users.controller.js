@@ -19,9 +19,14 @@ function users(req, res, next) {
 			res.status(200).json(isLoggedIn);
 			break;
 		case 'logout':
-			if (req.session) {
-				req.session.destroy(error => error ? res.status(500).json(error) : res.status(200).send(''));
-			}
+			req.session.destroy(error => {
+				if (error) {
+					res.status(500).json(error);
+					nestor.log(error, { type: error });
+				} else {
+					res.status(200).json(true);
+				}
+			});
 			break;
 	}
 }

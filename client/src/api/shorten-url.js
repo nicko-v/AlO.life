@@ -1,4 +1,4 @@
-export default function shortenUrl(url, alias) {
+export default function api_shortenUrl(url, alias) {
 	return new Promise((resolve, reject) => {
 		const xhr  = new XMLHttpRequest();
 		const data = JSON.stringify({ url, alias });
@@ -20,4 +20,4 @@ export default function shortenUrl(url, alias) {
 		xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 		xhr.send(data);
 	});
-}
+};

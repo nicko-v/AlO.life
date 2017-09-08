@@ -1,7 +1,7 @@
-import React      from 'react';
-import Nav        from '../components/nav/index.jsx';
-import isLoggedIn from '../api/is-logged-in.js'
-import logout     from '../api/logout.js'
+import React          from 'react';
+import Nav            from '../components/nav/index.jsx';
+import api_isLoggedIn from '../api/is-logged-in.js'
+import api_logout     from '../api/logout.js'
 
 
 export default class NavContainer extends React.Component {
@@ -15,11 +15,11 @@ export default class NavContainer extends React.Component {
 		
 		this.toggleDropdown = this.toggleDropdown.bind(this);
 		this.closeDropdown  = this.closeDropdown.bind(this);
-		this.logout = this.logout.bind(this);
+		this.logout         = this.logout.bind(this);
 	}
 	
 	componentWillMount() {
-		isLoggedIn()
+		api_isLoggedIn()
 			.then(response => this.setState({ isLoggedIn: response }))
 			.catch(error => console.error(error));
 	}
@@ -33,7 +33,7 @@ export default class NavContainer extends React.Component {
 	}
 	
 	logout() {
-		logout()
+		api_logout()
 			.then(() => this.setState({ isLoggedIn: false }))
 			.catch(error => console.error(error));
 	}

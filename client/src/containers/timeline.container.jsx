@@ -1,6 +1,6 @@
-import React         from 'react';
-import Timeline      from '../components/timeline/index.jsx';
-import getEventsList from '../api/get-events-list.js'
+import React             from 'react';
+import Timeline          from '../components/timeline/index.jsx';
+import api_getEventsList from '../api/get-events-list.js'
 
 
 export default class TimelineContainer extends React.Component {
@@ -55,7 +55,7 @@ export default class TimelineContainer extends React.Component {
 	componentDidMount() {
 		const storedYears = JSON.parse(window.sessionStorage.getItem('timeline-show-by-year')) || {};
 		
-		getEventsList(+this.state.newestFirst)
+		api_getEventsList(+this.state.newestFirst)
 			.then(events => {
 				const yearsList = new Set(events.map( (event) => event.date.year ));
 				

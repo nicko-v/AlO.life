@@ -6,7 +6,7 @@ const logsCheckInterval = 5; // Часы. Интервал проверки ра
 const isProduction      = process.env.NODE_ENV.startsWith('prod');
 const useHttps          = isProduction;
 const hostname          = isProduction ? 'alo.life' : `127.0.0.1:${port}`;
-const cookiesDomain     = isProduction ? `http${useHttps ? 's' : ''}://${hostname}` : null; // null позволяет устанавливать куки для localhost
+const cookiesDomain     = isProduction ? `.${hostname}` : null; // null позволяет устанавливать куки для localhost
 const oauthRedirect     = 'https://alo.life/s/login';
 
 module.exports = {

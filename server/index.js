@@ -39,7 +39,7 @@ const MySqlStore     = ems(expressSession);
 const sessionStore   = new MySqlStore({}, pool);
 const sessionOptions = {
 	name: 'express.sid',
-	proxy: config.isProduction,
+	proxy: config.useHttps,
 	secret: secret.cookiesSecret,
 	store: sessionStore,
 	resave: false,
@@ -74,9 +74,9 @@ function setResHeaders(req, res, next) {
 		'X-DNS-Prefetch-Control': 'off',
 		'Strict-Transport-Security': `max-age=${90 * 24 * 60 * 60}; includeSubDomains`,
 		'X-XSS-Protection': '1; mode=block',
-    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-    'Pragma': 'no-cache',
-    'Expires': '0',
+		'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+		'Pragma': 'no-cache',
+		'Expires': '0',
 		'Content-Security-Policy': `default-src 'self'; style-src 'self' 'unsafe-inline'`,
 	});
 	

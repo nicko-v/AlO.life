@@ -1,4 +1,4 @@
-export default function getEventsList(order) {
+export default function api_getEventsList(order) {
 	return new Promise((resolve, reject) => {
 		const xhr = new XMLHttpRequest();
 		
@@ -16,4 +16,4 @@ export default function getEventsList(order) {
 		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 		xhr.send();
 	});
-}
+};

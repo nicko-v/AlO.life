@@ -1,4 +1,4 @@
-export default function logout() {
+export default function api_logout() {
 	return new Promise((resolve, reject) => {
 		const xhr  = new XMLHttpRequest();
 		const data = JSON.stringify({ action: 'logout' });
@@ -18,4 +18,4 @@ export default function logout() {
 		xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 		xhr.send(data);
 	});
-}
+};
