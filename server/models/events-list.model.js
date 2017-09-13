@@ -26,7 +26,7 @@ const model = {
 								id:    event.id,
 								name:  event.header,
 								descr: event.descr || '',
-								icon:  event.icon || 'info',
+								type:  event.type,
 								date: {
 									year:  event.date.getFullYear(),
 									month: event.date.getMonth() + 1,

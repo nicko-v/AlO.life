@@ -80,44 +80,46 @@
 	flex-direction: column;
 	margin-top: 50px;
 	width: 100%;
+	position: relative;
+}
+.timeline-eventslist::before {
+	content: "";
+	display: block;
+	background-image: linear-gradient(to bottom, #900 calc(100% - 150px), transparent);
+	width: 10px;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 190px; /* Ширина блока даты + половина ширины блока иконки */
+	transform: translateX(-50%);
+	z-index: 1;
+}
+.timeline-eventslist[data-size="0"]::before {
+	display: none;
 }
 .timeline-eventslist-date {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
-	position: relative;
 	width: 125px;
 	min-width: 125px;
 }
-.timeline-eventslist-date::after {
-	content: "";
-	display: block;
-	width: 20px;
-	height: 20px;
-	background-color: #ddd;
-	position: absolute;
-	top: 32px;
-	right: -133px;
-	transform: rotate(45deg) translateY(-50%);
-	z-index: 1;
-}
-.timeline-eventslist-date > h1 {
-	margin: -20px 0 0 0;
-	color: #ccc;
-	font-size: 50px;
-}
-.timeline-eventslist-date > p {
-	margin: 30px 0 0 0;
-	transform: translateY(-50%);
+.timeline-eventslist-date-day {
 	font-size: 20px;
 	color: #900;
 	white-space: nowrap;
+	line-height: 70px; /* Высота иконки */
+}
+.timeline-eventslist-date-year {
+	font-size: 50px;
+	font-weight: bold;
+	color: #ccc;
+	margin-top: -30px; /* Компенсация line-height у блока с числом месяца */
 }
 .timeline-eventslist-icon {
 	border: 7px solid #900;
 	background-color: #e8e8e8;
 	box-sizing: border-box;
-	border-radius: 50%;
 	width: 70px;
 	height: 70px;
 	min-width: 70px;
@@ -127,31 +129,39 @@
 	align-items: center;
 	font-size: 30px;
 	margin: 0 30px;
-	position: relative;
 	z-index: 2;
+	cursor: pointer;
+	transition: border-radius 200ms linear;
+}
+.timeline-eventslist-icon_rounded {
+	border-radius: 50%;
+}
+.timeline-eventslist-icon_squared {
+	border-radius: 15%;
 }
 .timeline-eventslist-descr {
 	background-color: #ddd;
 	padding: 30px 30px;
 	border-radius: 5px;
-	position: relative;
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
 	z-index: 2;
 	width: 100%; /* IE */
 	box-sizing: border-box;
+	position: relative;
 }
 .timeline-eventslist-descr::before {
 	content: "";
 	display: block;
-	background-color: #900;
-	width: 10px;
-	height: calc(100% + 160px); /* Второе слагаемое компенсирует margin-bottom у каждого элемента списка и часть, которая видна во время начальной анимации */
+	width: 20px;
+	height: 20px;
+	background-color: inherit; /* Т.к. цвета блоков описаний чередуются */
 	position: absolute;
-	top: 65px;
-	left: -65px;
-	transform: translateX(-50%);
+	top: 32px;
+	left: -10px;
+	transform-origin: center;
+	transform: rotate(45deg) translate(-25%, -25%);
 	z-index: 1;
 }
 .timeline-eventslist-descr > h3 {
@@ -188,14 +198,6 @@
 .timeline-eventslist > li:nth-child(2n) > .timeline-eventslist-descr {
 	background-color: #eee;
 }
-.timeline-eventslist > li:nth-child(2n) > .timeline-eventslist-date::after {
-	background-color: #eee;
-}
-.timeline-eventslist > li:nth-last-child(2) > .timeline-eventslist-descr::before {
-	height: calc(100% + 50px);
-	background-color: transparent;
-	background-image: linear-gradient(to bottom, #900, #fff);
-}
 .timeline-eventslist > li:last-child {
 	display: none;
 }
@@ -215,8 +217,9 @@
 	}
 }
 @media (max-width: 900px) {
-	.timeline-eventslist-date > h1 {
+	.timeline-eventslist-date-year {
 		font-size: 30px;
+		margin-top: -25px;
 	}
 }
 @media (max-width: 600px) {
@@ -230,26 +233,25 @@
 		display: none;
 	}
 	.timeline-eventslist-descr {
-		margin-top: 10px;
+		margin-top: 20px;
 	}
 	.timeline-eventslist-descr > h3 {
 		text-align: center;
 	}
-	.timeline-eventslist-date::after {
-		left: 20px;
-		top: auto;
-		bottom: -27px;
+	.timeline-eventslist::before {
+		display: none;
 	}
 	.timeline-eventslist-descr::before {
-		display: none;
+		left: 30px;
+		top: -3px;
 	}
 	.timeline-eventslist-date {
 		flex-direction: column-reverse;
 		align-items: flex-start;
 		margin-left: 20px;
 	}
-	.timeline-eventslist-date > p {
-		margin-top: 10px;
+	.timeline-eventslist-date-day {
+		line-height: normal;
 	}
 	.timeline-controls {
 		flex-wrap: wrap;

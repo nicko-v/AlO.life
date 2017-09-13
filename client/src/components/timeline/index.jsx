@@ -7,14 +7,14 @@ import Search      from './search.jsx';
 import YearsToggle from './years-toggle.jsx';
 
 
-const Timeline = ({ years, toggleYear, toggleTimeline, handleSearchChange, isActive, events }) =>
+const Timeline = ({ hiddenYears, filterByYear, filterByType, toggleTimeline, handleSearchChange, isOrderToggleActive, isFilteredByType, events, years }) =>
 	<main className="timeline">
 		<div className="timeline-controls">
-			<YearsToggle years={years} onClick={toggleYear} />
+			<YearsToggle hiddenYears={hiddenYears} years={years} onClick={filterByYear} />
 			<Search handleSearchChange={handleSearchChange} />
-			<OrderToggle isActive={isActive} onClick={toggleTimeline} />
+			<OrderToggle isActive={isOrderToggleActive} onClick={toggleTimeline} />
 		</div>
-		<EventsList events={events} />
+		<EventsList events={events} filterByType={filterByType} isFilteredByType={isFilteredByType} />
 	</main>;
 
 

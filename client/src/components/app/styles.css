@@ -78,6 +78,9 @@ button:active, button:focus {
 	-webkit-user-select: none;
 	cursor: default;
 }
+.nopointerevents {
+	pointer-events: none;
+}
 .pusher {
 	flex-grow: 1;
 }

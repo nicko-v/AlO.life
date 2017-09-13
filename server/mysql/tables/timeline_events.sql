@@ -3,7 +3,7 @@ CREATE TABLE `timeline_events` (
   `header` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `descr` text COLLATE utf8mb4_unicode_ci,
   `date` date NOT NULL,
-  `icon` tinytext COLLATE utf8mb4_unicode_ci,
+  `type` tinyint(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `event_id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
