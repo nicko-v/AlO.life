@@ -1,0 +1,12 @@
+.button_rect {
+	transition: all 0s ease 0s;
+	color: $d_input_regular_text;
+	border-color: $d_input_regular_border;
+	
+	&:hover {
+		border-color: $d_input_regular_border_hover;
+	}
+	&:active {
+		border-color: $d_input_regular_border_active;
+	}
+}

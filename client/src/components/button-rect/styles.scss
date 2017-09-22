@@ -1,0 +1,17 @@
+.button_rect {
+	margin: 0;
+	padding: 0;
+	color: $l_input_regular_text;
+	background-color: transparent;
+	border: 1px solid $l_input_regular_border;
+	border-radius: 2px;
+	cursor: pointer;
+	transition: border 250ms ease-out;
+	
+	&:hover {
+		border: 1px solid $l_input_regular_border_hover;
+	}
+	&:active {
+		border: 1px solid $l_input_regular_border_active;
+	}
+}

@@ -1,0 +1,33 @@
+.shortener-form-urlField-input {
+	transition-property: none;
+	border-color: $d_border;
+	
+	&:focus {
+		border-color: $d_input_regular_border_active;
+		box-shadow: none;
+	}
+}
+.shortener-form-urlField-cog_active {
+	color: $d_input_regular_border_active;
+}
+.shortener-form-optionsWrapper {
+	background-color: $d_nav_bg;
+}
+.shortener-form-options {
+	border-top-color: $d_border;
+	border-bottom-color: $d_border;
+}
+.shortener-form-options-input {
+	border-bottom-color: $d_border;
+	color: $d_text_main;
+	
+	&:focus {
+		border-bottom-color: $d_input_regular_border_active;
+	}
+}
+.shortener-message-header_success {
+	color: $d_success;
+}
+.shortener-message-header_error {
+	color: $d_error;
+}

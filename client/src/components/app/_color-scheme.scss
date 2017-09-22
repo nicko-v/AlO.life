@@ -1,0 +1,81 @@
+/* Используемые цвета */
+
+$red_main: #900;
+
+$grey_main: #777;
+$grey_light: #ccc;
+$grey_dark: #555;
+
+$gold_main: #bb832d;
+
+/* -=-=-=- */
+
+
+
+
+/* Внешние переменные */
+
+// Светлое оформление:
+$l_nav_bg: #e8e8e8;
+$l_nav_li_current_bg: darken($l_nav_bg, 5%);
+$l_nav_li_hover_bg: darken($l_nav_bg, 10%);
+$l_nav_li_active_bg: darken($l_nav_bg, 15%);
+$l_navcape_bg: #ddd;
+$l_content_bg: transparent;
+
+$l_border: $grey_light;
+
+$l_link: $gold_main;
+
+$l_decor: $red_main;
+
+$l_text_main: $grey_main;
+$l_text_minor: $grey_light;
+$l_text_major: $grey_dark;
+
+$l_input_regular_border: $l_border;
+$l_input_regular_border_hover: darken($l_input_regular_border, 10%);
+$l_input_regular_border_active: darken($l_input_regular_border, 15%);
+$l_input_regular_text: $l_text_main;
+$l_input_regular_text_hover: darken($l_input_regular_text, 10%);
+$l_input_regular_text_active: darken($l_input_regular_text, 15%);
+
+$l_toggle_on: $l_decor;
+$l_toggle_off: $grey_main;
+
+$l_success: #090;
+$l_error: #900;
+
+
+//Темное оформление:
+$d_nav_bg: #444;
+$d_nav_li_current_bg: darken($d_nav_bg, 2%);
+$d_nav_li_hover_bg: darken($d_nav_bg, 5%);
+$d_nav_li_active_bg: darken($d_nav_bg, 10%);
+$d_navcape_bg: #333;
+$d_content_bg: #222;
+
+$d_border: $grey_dark;
+
+$d_link: $gold_main;
+
+$d_decor: $red_main;
+
+$d_text_main: $grey_main;
+$d_text_minor: $grey_dark;
+$d_text_major: $grey_light;
+
+$d_input_regular_border: $d_border;
+$d_input_regular_border_hover: lighten($d_input_regular_border, 10%);
+$d_input_regular_border_active: lighten($d_input_regular_border, 15%);
+$d_input_regular_text: $d_text_main;
+$d_input_regular_text_hover: lighten($d_input_regular_text, 10%);
+$d_input_regular_text_active: lighten($d_input_regular_text, 15%);
+
+$d_toggle_on: $d_decor;
+$d_toggle_off: $grey_main;
+
+$d_success: #090;
+$d_error: #900;
+
+/* -=-=-=- */

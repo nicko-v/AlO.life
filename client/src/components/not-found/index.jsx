@@ -1,14 +1,12 @@
-import styles      from './styles.css';
-import styles_dark from './styles.dark.css';
-import React       from 'react';
+import React from 'react';
 
 
 const NotFound = () =>
 	<main className="notfound noselect">
-		<h1>404</h1>
-		<h2>Страница не&nbsp;найдена</h2>
+		<h1 className="notfound-error_code">404</h1>
+		<h2 className="notfound-error">Страница не&nbsp;найдена</h2>
 		<hr />
-		<p>Проверьте корректность указанного адреса, либо воспользуйтесь навигационным меню для перехода в нужный раздел сайта</p>
+		<p className="notfound-error_hint">Проверьте корректность указанного адреса, либо воспользуйтесь навигационным меню для перехода в нужный раздел сайта</p>
 	</main>;
 
 

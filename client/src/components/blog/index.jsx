@@ -1,6 +1,5 @@
-import styles from './styles.css';
-import React  from 'react';
-import Post   from './post.jsx';
+import React       from 'react';
+import Post        from './post.jsx';
 
 
 const Blog = () =>

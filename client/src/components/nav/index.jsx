@@ -1,10 +1,7 @@
-import styles          from './styles.css';
-import styles_dark     from './styles.dark.css';
 import React           from 'react';
 import AccountControls from './account-controls.jsx';
 import Cape            from './cape.jsx';
 import ServicesList    from './services-list.jsx';
-import { Link }        from 'react-router-dom';
 
 
 const nbsp = String.fromCharCode(160);

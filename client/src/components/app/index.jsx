@@ -1,5 +1,3 @@
-import styles                  from './styles.css';
-import styles_dark             from './styles.dark.css';
 import React                   from 'react';
 import { Route, Switch }       from 'react-router-dom';
 import NavContainer            from '../../containers/nav.container.jsx';

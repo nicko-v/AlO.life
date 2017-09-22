@@ -5,10 +5,7 @@ footer {
 	width: 90%;
 	height: 60px;
 	min-height: 60px;
-	border-top: 1px solid #ccc;
-	color: #ccc;
+	border-top: 1px solid $l_border;
+	color: $l_text_minor;
 	margin-top: 100px;
-}
-footer a {
-	color: inherit;
 }

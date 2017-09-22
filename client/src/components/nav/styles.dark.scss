@@ -1,0 +1,39 @@
+nav {
+	background-color: $d_nav_bg;
+	color: $d_text_main;
+	border-right-color: $d_border;
+	
+	@media (max-width: 900px) {
+		border-right: none;
+		border-bottom-color: $d_border;
+	}
+}
+.nav-cape {
+	background-color: $d_navcape_bg;
+}
+.nav-cape-heart-path {
+	fill: $d_decor;
+	stroke: $d_decor;
+}
+.nav-sitename {
+	color: $d_decor;
+	border-bottom-color: $d_border;
+}
+.nav-services {
+	@media (max-width: 900px) {
+		background-color: $d_nav_bg;
+		border-color: $d_border;
+		border-top: none;
+	}
+}
+.nav-services-service {
+	&:hover {
+		background-color: $d_nav_li_hover_bg;
+	}
+	&:active {
+		background-color: $d_nav_li_active_bg;
+	}
+}
+.nav-services-service_current {
+	background-color: $d_nav_li_current_bg;
+}

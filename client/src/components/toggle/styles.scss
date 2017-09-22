@@ -1,0 +1,38 @@
+.toggle {
+	$toggle_width: 55px !global;
+	$toggle_height: 30px !global;
+	$toggle_grip_size: $toggle_height - 6px !global;
+	$toggle_grip_clearance: ($toggle_height - $toggle_grip_size) / 2 !global;
+	
+	width: $toggle_width;
+	height: $toggle_height;
+	border-radius: 15px;
+	cursor: pointer;
+	position: relative;
+	transition: background-color 200ms ease-out;
+	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.22);
+	
+	&::before {
+		width: $toggle_grip_size;
+		height: $toggle_grip_size;
+		content: "";
+		display: block;
+		border-radius: 50%;
+		background-image: linear-gradient(45deg, #aaa, #fff);
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
+		position: absolute;
+		top: $toggle_grip_clearance;
+		right: $toggle_grip_clearance;
+		transition: right 200ms ease-out;
+	}
+}
+.toggle_on {
+	background-color: $l_toggle_on;
+}
+.toggle_off {
+	background-color: $l_toggle_off;
+	
+	&::before {
+		right: $toggle_width - $toggle_grip_size - $toggle_grip_clearance;
+	}
+}

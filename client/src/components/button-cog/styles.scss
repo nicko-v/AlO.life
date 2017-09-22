@@ -4,9 +4,10 @@
 	transition: transform 500ms ease-out;
 	transform-origin: center;
 	margin-left: 10px;
-	background-color: rgba(0, 0, 0, 0);
 	padding: 0;
+	color: $l_input_regular_text;
 }
-.button_cog:active {
-	color: #555;
+.button_cog_active {
+	color: $l_input_regular_text_active;
+	transform: rotate(-70deg);
 }

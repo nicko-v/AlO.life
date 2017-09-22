@@ -1,5 +1,3 @@
-import styles      from './styles.css';
-import styles_dark from './styles.dark.css';
 import React       from 'react';
 import EventsList  from './events-list.jsx';
 import OrderToggle from './order-toggle.jsx';

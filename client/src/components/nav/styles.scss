@@ -1,0 +1,192 @@
+nav {
+	width: $nav_width;
+	min-width: $nav_width;
+	background-color: $l_nav_bg;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: $l_text_main;
+	position: fixed;
+	left: 0;
+	height: 100%;
+	z-index: 10;
+	border-right: 1px solid $l_border;
+	box-sizing: border-box;
+	
+	@media (max-width: 900px) {
+		position: relative;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 80px;
+		min-height: 80px;
+		border-right: none;
+		flex-direction: row;
+		justify-content: space-between;
+		font-size: 14px;
+		border-bottom: 1px solid $l_border;
+	}
+}
+.nav-cape {
+	display: flex;
+	margin-top: -2px; /* Компенсирует сдвиг тени */
+	background-color: $l_navcape_bg;
+	box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.2);
+	border-bottom-left-radius: 30px;
+	border-bottom-right-radius: 30px;
+	padding-top: 30px;
+	min-height: 120px; /* Высота svg */
+	margin-bottom: 40px;
+	
+	@media (max-width: 900px) {
+		min-height: 100px; /* Высота svg */
+		padding-top: 25px;
+		border-bottom-left-radius: 25px;
+		border-bottom-right-radius: 25px;
+		align-self: flex-start;
+		z-index: 2;
+		margin-bottom: 0;
+	}
+}
+.nav-cape-heart {
+	width: 120px;
+	height: 120px;
+	
+	@media (max-width: 900px) {
+		width: 100px;
+		height: 100px;
+	}
+}
+.nav-cape-heart-path {
+	fill: $l_decor;
+	fill-opacity: 0;
+	stroke-opacity: 0;
+	stroke: $l_decor;
+	stroke-width: 2;
+	stroke-linecap: round;
+	transform-origin: 25px 25px; /* Т.к. ФФ не понимает значение "center" для svg */
+	stroke-dasharray: 0, 110;
+	animation: heart-draw, heart-strokeOpacity, heart-fillOpacity, heart-beatFast, heart-beatSlow;
+	animation-duration: 2.5s, 2.5s, 1s, 1.5s, 5s;
+	animation-timing-function: ease-out, linear, ease-in, ease, cubic-bezier(.63, .12, 1, .50);
+	animation-delay: 0.5s, 0.5s, 2.7s, 3.7s, 10s;
+	animation-iteration-count: 1, 1, 1, 1, infinite;
+	animation-direction: alternate, alternate, alternate, normal, alternate;
+	animation-fill-mode: forwards, forwards, forwards, none, none;
+}
+.nav-sitename {
+	font-family: 'Sofia', cursive;
+	font-size: 26px;
+	width: 80%;
+	color: $l_decor;
+	text-align: center;
+	border-bottom: 1px solid $l_border;
+	padding-bottom: 10px;
+	flex-shrink: 0;
+	white-space: nowrap;
+	
+	@media (max-width: 900px) {
+		display: none;
+	}
+	
+}
+.nav-services {
+	margin-top: 20px;
+	list-style: none;
+	width: 100%;
+	text-align: center;
+	text-transform: uppercase;
+	flex-grow: 1;
+	
+	@media (max-width: 900px) {
+		position: absolute;
+		width: 100%;
+		top: 80px;
+		left: 0;
+		margin-top: 0;
+		padding-top: 50px;
+		background-color: $l_nav_bg;
+		border: 1px solid $l_border;
+		border-top: none;
+		z-index: 1;
+		box-sizing: border-box;
+	}
+}
+.nav-services_collapsed {
+	@media (max-width: 900px) {
+		display: none;
+	}
+}
+.nav-services_expanded {
+	@media (max-width: 900px) {
+		display: block;
+	}
+}
+.nav-services-service {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 50px;
+	transition: background-color .2s ease-out 0s;
+	box-sizing: border-box;
+	
+	@media (max-width: 900px) {
+		padding: 0 10px;
+	}
+	
+	&:hover {
+		background-color: $l_nav_li_hover_bg;
+	}
+	&:active {
+		background-color: $l_nav_li_active_bg;
+	}
+}
+.nav-services-service_current {
+	background-color: $l_nav_li_current_bg;
+}
+.nav-account_controls {
+	margin: 30px 0;
+	display: flex;
+	justify-content: center;
+	
+	@media (max-width: 900px) {
+		padding: 10px 20px;
+		margin: 0;
+		justify-content: flex-end;
+		align-items: center;
+		width: calc(50% - 50px);
+		height: 100%;
+		box-sizing: border-box;
+	}
+	@media (max-width: 400px) {
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+	}
+}
+.nav-account_controls > a:first-child {
+	margin-right: 25px;
+	
+	@media (max-width: 400px) {
+		margin-right: 0;
+	}
+}
+.nav-account_controls > a:only-child {
+	margin-right: 0;
+}
+
+.nav-mobile_dropdown {
+	display: none;
+	
+	@media (max-width: 900px) {
+		display: block;
+		width: calc(50% - 50px);
+		height: 100%;
+		padding: 0 20px;
+		cursor: pointer;
+		text-transform: uppercase;
+		box-sizing: border-box;
+		background-color: transparent;
+	}
+}

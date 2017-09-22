@@ -1,0 +1,44 @@
+.timeline-controls {
+	color: $d_text_main;
+}
+.timeline-controls-yearChoice-years-year {
+	&::before {
+		background-color: $d_text_main;
+	}
+}
+.timeline-controls-search-input {
+	transition: all 0s ease 0s;
+	border-color: $d_border;
+	
+	&:focus {
+		border-color: $d_input_regular_border_active;
+		box-shadow: none;
+	}
+}
+.timeline-eventslist {
+	&::before {
+		background-image: linear-gradient(to top, transparent, $d_decor 150px);
+	}
+}
+.timeline-eventslist-event {
+	&:nth-child(2n) > .timeline-eventslist-event-descr {
+		background-color: $d_nav_bg;
+	}
+}
+.timeline-eventslist-event-date-day {
+	color: $d_decor;
+}
+.timeline-eventslist-event-date-year {
+	color: $d_text_minor;
+}
+.timeline-eventslist-event-icon {
+	border-color: $d_decor;
+	background-color: $d_nav_bg;
+}
+.timeline-eventslist-event-descr {
+	background-color: darken($d_nav_bg, 5%);
+	color: $d_text_main;
+}
+.timeline-eventslist-event-descr > p {
+	border-top-color: $d_border;
+}

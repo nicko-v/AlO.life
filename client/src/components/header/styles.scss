@@ -1,20 +1,19 @@
 header {
 	width: 90%;
 	min-height: 80px;
-	border-bottom: 1px solid #ccc;
+	border-bottom: 1px solid $l_border;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	opacity: 0;
 	animation: fade-in 300ms ease-in forwards;
-}
-.header-title {
-	color: #900;
-	text-align: center;
-}
-
-@media (max-width: 900px) {
-	header {
+	
+	@media (max-width: 900px) {
 		cursor: pointer !important;
 	}
+}
+.header-title {
+	color: $l_decor;
+	text-align: center;
+	margin: 0;
 }

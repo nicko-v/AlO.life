@@ -4,9 +4,9 @@ import { NavLink } from 'react-router-dom';
 
 const nbsp = String.fromCharCode(160);
 const classes = {
-	className: 'aNoAnim',
+	className: 'nav-services-service link_unstyled',
 	activeClassName: 'nav-services-service_current'
-};
+}
 
 const ServicesList = ({ closeDropdown, isDropdownActive }) =>
 	<ul className={`nav-services nav-services_${isDropdownActive ? 'expanded' : 'collapsed' }`} onClick={closeDropdown}>

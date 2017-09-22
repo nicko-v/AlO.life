@@ -1,6 +1,4 @@
-import styles      from './styles.css';
-import styles_dark from './styles.dark.css';
-import React       from 'react';
+import React from 'react';
 
 
 const DarkModeSwitch = ({ onClick }) =>

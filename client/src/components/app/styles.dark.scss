@@ -1,0 +1,18 @@
+input::-webkit-input-placeholder,
+input::-ms-input-placeholder,
+input::-moz-placeholder {
+	color: $d_text_minor;
+}
+
+html {
+	background-color: $d_content_bg;
+}
+a {
+	color: $d_link;
+	&::before {
+		color: $d_link;
+	}
+}
+main {
+	color: $d_text_main;
+}

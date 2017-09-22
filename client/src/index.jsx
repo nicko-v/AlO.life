@@ -1,3 +1,5 @@
+import styles            from './index.scss';
+import styles_dark       from './index.dark.scss';
 import React             from 'react';
 import ReactDOM          from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';

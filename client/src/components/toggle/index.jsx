@@ -1,5 +1,4 @@
-import styles from './styles.css';
-import React  from 'react';
+import React from 'react';
 
 
 const Toggle = ({ isActive, onClick }) =>

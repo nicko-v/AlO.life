@@ -30,14 +30,18 @@ module.exports = {
 			},
 			
 			{
-				test: /\.css$/,
-				exclude: /\.dark\.css$/,
-				use: extractRegularStyles.extract(['css-loader', 'postcss-loader'])
+				test: /index\.scss$/,
+				use: extractRegularStyles.extract(['css-loader', 'sass-loader', 'postcss-loader'])
 			},
 			
 			{
-				test: /\.dark\.css$/,
-				use: extractDarkStyles.extract(['css-loader', 'postcss-loader'])
+				test: /index\.dark\.scss$/,
+				use: extractDarkStyles.extract(['css-loader', 'sass-loader', 'postcss-loader'])
+			},
+			
+			{
+				test: /\.css$/,
+				use: extractRegularStyles.extract(['css-loader', 'postcss-loader'])
 			},
 		]
 	},

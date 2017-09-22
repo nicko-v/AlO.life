@@ -1,5 +1,3 @@
-import styles       from './styles.css';
-import styles_dark  from './styles.dark.css';
 import React        from 'react';
 import ButtonRect   from '../button-rect/index.jsx'
 import Message      from './message.jsx';
