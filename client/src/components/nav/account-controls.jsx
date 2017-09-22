@@ -6,9 +6,9 @@ const authUri = 'https://oauth.vk.com/authorize?client_id=6143698&display=page&r
 
 const AccountControls = ({ isLoggedIn, logout }) =>
 	<div className="nav-account_controls">
-		{isLoggedIn  && <Link to="/s/account">Аккаунт</Link>}
-		{isLoggedIn  && <Link to="/" onClick={logout}>Выйти</Link>}
-		{!isLoggedIn && <a href={authUri}>Войти</a>}
+		{isLoggedIn  && <Link to="/s/account" className="link_unstyled">Аккаунт</Link>}
+		{isLoggedIn  && <Link to="/" className="link_unstyled" onClick={logout}>Выйти</Link>}
+		{!isLoggedIn && <a href={authUri} className="link_unstyled">Войти</a>}
 	</div>;
 
 
